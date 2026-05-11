@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+body {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  height: 100vh;
+  background: #000;
+}
+
+@theme {
+  /* mint + red */
+  /* --color-mint-500: oklch(89.16% 0.171 173.24);
+  --color-red-500: oklch(63.63% 0.249 28.24);
+  --color-yellow-500: oklch(96.80% 0.211 109.77);
+  --color-blue-500: oklch(75.82% 0.120 204.63); */
+
+  --color-mint-200: oklch(96.5% 0.08 173.24);  /* Very Light Mint */
+  --color-mint-500: oklch(89.16% 0.171 173.24); /* Your Base */
+  --color-mint-700: oklch(75.0% 0.14 173.24);   /* Darker Mint */
+
+  --color-red-200: oklch(92.0% 0.12 28.24);    /* Soft Pink/Red */
+  --color-red-500: oklch(63.63% 0.249 28.24);   /* Your Base */
+  --color-red-700: oklch(50.0% 0.22 28.24);     /* Deep Red */
+
+  --color-yellow-200: oklch(98.5% 0.10 109.77); /* Pale Cream */
+  --color-yellow-500: oklch(96.80% 0.211 109.77); /* Your Base */
+  --color-yellow-700: oklch(85.0% 0.18 109.77); /* Mustard/Gold */
+
+  --color-blue-200: oklch(92.0% 0.06 204.63);   /* Ice Blue */
+  --color-blue-500: oklch(75.82% 0.120 204.63); /* Your Base */
+  --color-blue-700: oklch(55.0% 0.10 204.63);   /* Navy/Slate Blue */
+
+  --color-wood-500: oklch(78.61% 0.116 84.30);
+  --color-wood-700: oklch(51.20% 0.090 62.20);
+}

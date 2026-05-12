@@ -10,11 +10,15 @@ export default function BargeesGame() {
     const [player2ActiveElements, setPlayer2ActiveElements] = useState(0);
     const [playerTurn, setPlayerTurn] = useState("player1");
     const [stonesValue, setStonesValue] = useState(null); //bara shakkeh binj dast 4 3 2 
+    const [playerCurrentScore, setPlayerCurrentScore] = useState(0);
+    const [selectedPieceIndex, setSelectedPieceIndex] = useState(-1);
+
+    const [globalBoard, setGlobalBoard] = useState<string | null[]>(Array(24).fill(null));
+
     return (
         <div className="w-screen rounded-3xl h-130 border-2 border-double 
                 flex justify-evenly items-center 
             ">
-
             <BargeesGameContext.Provider value={{
                 player1ActiveElements,
                 setPlayer1ActiveElements,
@@ -25,7 +29,13 @@ export default function BargeesGame() {
                 stonesValue,
                 setStonesValue,
                 gameState,
-                setGameState
+                setGameState,
+                playerCurrentScore,
+                setPlayerCurrentScore,
+                selectedPieceIndex,
+                setSelectedPieceIndex,
+                globalBoard,
+                setGlobalBoard
             }}
             >
 

@@ -1,3 +1,3 @@
 import {createContext} from "react";
 
-export const BargeesGameContext = createContext([]);
+export const BargeesGameContext = createContext<any>(null);

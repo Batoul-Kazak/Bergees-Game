@@ -12,7 +12,9 @@ export default function GameOptions() {
         stonesValue,
         setStonesValue,
         gameState,
-        setGameState
+        setGameState,
+        playerCurrentScore,
+        setPlayerCurrentScore,
     } = useContext(BargeesGameContext);
     const optionButtonText = gameState === "idle" ? "Start" : gameState === "waiting" ? "Shake and Throw" : gameState == "playing" ? "..." : "Play Again";
     const instructionText = gameState === "idle" ? "Press the button and start playing" :
@@ -32,10 +34,10 @@ export default function GameOptions() {
             <h3 className="py-2 font-bold">Game State: {gameState}</h3>
             <div className="p-4 flex justify-around  w-full">
                 <PlayerInfo player="player1" playerActiveElements={player1ActiveElements}
-                    setPlayerActiveElements={setPlayer1ActiveElements} />
+                    setPlayerActiveElements={setPlayer1ActiveElements} playerCurrentScore={playerCurrentScore} />
                 <div className="h-50 w-1 bg-wood-700"></div>
                 <PlayerInfo player="player2" playerActiveElements={player2ActiveElements}
-                    setPlayerActiveElements={setPlayer2ActiveElements} />
+                    setPlayerActiveElements={setPlayer2ActiveElements} playerCurrentScore={playerCurrentScore} />
             </div>
             <button
                 onClick={handleMove}
@@ -47,7 +49,8 @@ export default function GameOptions() {
 function PlayerInfo({
     player,
     playerActiveElements,
-    setPlayerActiveElements
+    // setPlayerActiveElements,
+    playerCurrentScore
 }) {
     const {
         playerTurn,
@@ -58,9 +61,10 @@ function PlayerInfo({
         <div className="flex gap-5  items-center pb-5 font-bold underline text-center">{player}
             {/* <div className="w-5 rounded-full border-2 border-green-700 h-5 bg-green-500"></div> */}
         </div>
-        <p> Turn:<span className={`${playerTurn == player ? "text-green-800" : "text-black-500"}`}> {playerTurn == player ? "yes" : "no"}</span></p>
-        <p>Alive Pieces: <span className="font-normal">{playerActiveElements}</span></p>
-        <p>Inactive Pieces: <span className="font-normal">{4 - playerActiveElements}</span></p>
+        <div className="border-b-2 border-black-500 pt-2">Current Score: {playerCurrentScore}</div>
+        <div className="border-b-2 border-black-500 pt-2"> Turn:<span className={`${playerTurn == player ? "text-green-800" : "text-black-500"}`}> {playerTurn == player ? "yes" : "no"}</span></div>
+        <div className="border-b-2 border-black-500 pt-2">Alive Pieces: <span className="font-normal">{playerActiveElements}</span></div>
+        <div className="border-b-2 border-black-500 pt-2">Inactive Pieces: <span className="font-normal">{4 - playerActiveElements}</span></div>
 
     </section>
 }

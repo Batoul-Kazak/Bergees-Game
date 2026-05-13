@@ -38,7 +38,8 @@ button {
   --color-blue-700: oklch(55.0% 0.10 204.63);   /* Navy/Slate Blue */
 
   --color-wood-500: oklch(78.61% 0.116 84.30);
-  --color-wood-700: oklch(51.20% 0.090 62.20);
+  --color-wood-700: oklch(52.24% 0.076 57.20);
+  --color-wood-200: oklch(75.00% 0.086 65.30);
 
   --color-black-700: oklch(0.00% 0.000 0);
   --color-black-500: oklch(25.20% 0.000 0);

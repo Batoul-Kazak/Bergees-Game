@@ -1,6 +1,11 @@
 import { useState, useContext } from 'react'
 import { BargeesGameContext } from '../../contexts/BargeesGameContext';
 
+import { PLAYER_1_HOME_1 } from '../../constants/boardHomes';
+import { PLAYER_1_HOME_2 } from '../../constants/boardHomes';
+import { PLAYER_2_HOME_1 } from '../../constants/boardHomes';
+import { PLAYER_2_HOME_2 } from '../../constants/boardHomes';
+
 export default function GameOptions() {
     const {
         player1ActiveElements,
@@ -35,15 +40,15 @@ export default function GameOptions() {
             <h2 className="py-4 font-bold">Stones Value: {stonesValue || "none"}</h2>
             <h3 className="py-2 font-bold">Game State: {gameState}</h3>
             <div className="p-4 flex justify-around  w-full">
-                <PlayerInfo player="player1" playerActiveElements={player1ActiveElements}
+                <PlayerInfo player="player1" playerActiveElements={player1ActiveElements} gameState={gameState}
                     setPlayerActiveElements={setPlayer1ActiveElements} playerCurrentScore={playerCurrentScore} />
                 <div className="h-50 w-1 bg-wood-700"></div>
-                <PlayerInfo player="player2" playerActiveElements={player2ActiveElements}
+                <PlayerInfo player="player2" playerActiveElements={player2ActiveElements} gameState={gameState}
                     setPlayerActiveElements={setPlayer2ActiveElements} playerCurrentScore={playerCurrentScore} />
             </div>
             <button
                 onClick={handleMove}
-                className="bg-mint-500 border-2 font-bold border-mint-700 py-2 px-6 rounded-2xl">{optionButtonText}</button>
+                className="bg-mint-700 border-2 font-bold border-black-500 py-2 px-6 rounded-2xl">{optionButtonText}</button>
         </div>
     )
 }
@@ -53,14 +58,26 @@ function PlayerInfo({
     playerActiveElements,
     // setPlayerActiveElements,
     playerCurrentScore,
-    playerCurrentCarryScore
+    playerCurrentCarryScore,
+    gameState
 }) {
     const {
         playerTurn,
         setPlayerTurn
     } = useContext(BargeesGameContext);
 
-    return <section className="font-semibold">
+    const FULL_SCORE = playerCurrentScore + playerCurrentCarryScore;
+    const CAN_ACTIVATE_ELEMENT = gameState === "playing" && playerActiveElements < 4 && (FULL_SCORE === 11 || FULL_SCORE === 25);
+
+    function handleCreateElement() {
+        const creationIndex = -1;
+
+        if (player === "player1")
+            creationIndex = FULL_SCORE === 25 ? PLAYER_1_HOME_2 : PLAYER_1_HOME_1;
+        else if (player === "player2") creationIndex = FULL_SCORE === 25 ? PLAYER_2_HOME_2 : PLAYER_2_HOME_1;
+    }
+
+    return <section className="font-semibold flex flex-col">
         <div className="flex gap-5  items-center pb-5 font-bold underline text-center">{player}
             {/* <div className="w-5 rounded-full border-2 border-green-700 h-5 bg-green-500"></div> */}
         </div>
@@ -69,6 +86,7 @@ function PlayerInfo({
         <div className="border-b-2 border-black-500 pt-2"> Turn:<span className={`${playerTurn == player ? "text-green-800" : "text-black-500"}`}> {playerTurn == player ? "yes" : "no"}</span></div>
         <div className="border-b-2 border-black-500 pt-2">Alive Pieces: <span className="font-normal">{playerActiveElements}</span></div>
         <div className="border-b-2 border-black-500 pt-2">Inactive Pieces: <span className="font-normal">{4 - playerActiveElements}</span></div>
+        <button disable={!CAN_ACTIVATE_ELEMENT} className="bg-mint-700 border-black-500 p-2 rounded-xl mt-2 disabled:bg-black-500" >Create Element</button>
 
     </section>
 }

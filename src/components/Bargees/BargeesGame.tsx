@@ -17,8 +17,8 @@ export default function BargeesGame() {
     const [globalBoard, setGlobalBoard] = useState<string | null[]>(Array(24).fill(null));
 
     return (
-        <div className="w-screen rounded-3xl h-130 border-2 border-double 
-                flex justify-evenly items-center 
+        <div className="rounded-3xl border-2 border-double 
+                flex justify-evenly w-screen h-screen items-center  relative md:flex-col lg:flex-row
             ">
             <BargeesGameContext.Provider value={{
                 player1ActiveElements,
@@ -41,8 +41,13 @@ export default function BargeesGame() {
                 setGlobalBoard
             }}
             >
-                <GameOptions />
-                <BargeesMainBoard />
+
+                <div className="flex-shrink-0 z-0">
+                    <BargeesMainBoard />
+                </div>
+                <div className="flex-shrink-0 z-0">
+                    <GameOptions />
+                </div>
             </BargeesGameContext.Provider>
         </div>
     )

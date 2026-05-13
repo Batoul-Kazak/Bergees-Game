@@ -51,7 +51,7 @@ export default function Kitchen() {
 
         const shuffled = stones.sort(() => Math.random() - 0.5);
         setGridContent(shuffled);
-    }, [])
+    }, []);
 
     return (
         <div className="w-60 h-30 bg-black-500 flex overflow-hidden justify-center items-center"

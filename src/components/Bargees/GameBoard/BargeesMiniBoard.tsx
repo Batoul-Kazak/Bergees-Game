@@ -2,15 +2,35 @@ import { useState, useContext } from 'react'
 import Player from './Player';
 import { BargeesGameContext } from "./../../../contexts/BargeesGameContext"
 
-export default function BargeesMiniBoard({ position, isTransparent = false, initialCellIndex = -1, safeCells = [], winCell = -1, home = "no" }) {
+const getCellCount = (position: string) => {
+    return position === "right" || position === "left" ? 8 : 3;
+}
+
+export default function BargeesMiniBoard({ position, startIndex = 0, isTransparent = false, initialCellIndex = -1, safeCells = [], winCell = -1, home = "no" }) {
+    const { player1ActiveElements,
+        setPlayer1ActiveElements,
+        player2ActiveElements,
+        setPlayer2ActiveElements,
+        globalBoard,
+        setGlobalBoard,
+        selectedPieceIndex,
+        setSelectedPieceIndex,
+        playerTurn,
+        gameState
+    } = useContext(BargeesGameContext);
+
+    const cellCount = getCellCount(position);
+    const localHomeIdx = home != "no" ? cellCount - 1 : -1;
+    const globalHomeIdx = home != "no" ? startIndex + localHomeIdx : -1;
+
     const totalPoints = 8 * 3;
     const [boardState] = useState<(string | null)[]>(Array(totalPoints).fill(null));
 
     const HOME_IDX = home === "player1" ? 19 : home === "player2" ? 7 : -1;
-    const { player1ActiveElements, player2ActiveElements } = useContext(BargeesGameContext);
-    const inactivePieces = HOME_IDX === 19 ? Math.max(0, 4 - player1ActiveElements) : Math.max(0, 4 - player2ActiveElements);
+    const inactivePieces = home === "player1" ? Math.max(0, 4 - player1ActiveElements) : Math.max(0, 4 - player2ActiveElements);
 
-    const getCellStyles = (index) => {
+    function getCellStyles(index: number) {
+        const globalIndex = startIndex + localIndex;
         let baseColor = "bg-[#d4a373]";
         let borderColor = "border-[#8b5e3c]";
 
@@ -32,6 +52,34 @@ export default function BargeesMiniBoard({ position, isTransparent = false, init
 
         return `${baseColor} ${borderColor} ${opacityClass}`
     }
+
+    // function handleCellClick(localIndex: number) {
+    //     if (gameState !== "playing") return;
+
+    //     const globalIndex = startIndex + localIndex;
+    //     const currentContent = globalBoard[globalIndex];
+
+    //     if (selectedPieceIndex !== -1) {
+    //         if (currentContent === selectedPieceIndex) return;
+
+    //         const currentPlayer = selectedPieceIndex.split('-')[0];
+    //         if (currentPlayer != playerTurn) return;
+
+    //         const newBoard = [...globalBoard];
+
+    //         const oldGlobalIndex = newBoard.indexOf(selectedPieceIndex);
+    //         if (oldGlobalIndex !== -1) {
+    //             newBoard[oldGlobalIndex] = null;
+    //         }
+
+    //         newBoard[globalIndex] = selectedPieceIndex;
+
+    //         setGlobalBoard(newBoard);
+    //         setSelectedPieceIndex(-1);
+
+    //         if (oldGlobalIndex === -1)
+    //     }
+    // }
 
     return (
         <div

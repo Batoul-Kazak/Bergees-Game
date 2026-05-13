@@ -38,7 +38,6 @@ export default function BargeesGame() {
                 setGlobalBoard
             }}
             >
-
                 <GameOptions />
                 <BargeesMainBoard />
             </BargeesGameContext.Provider>

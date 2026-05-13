@@ -41,6 +41,7 @@ export default function BargeesGame() {
                 <GameOptions />
                 <BargeesMainBoard />
             </BargeesGameContext.Provider>
+            <h1 className="text-white">1kndlkfnsdlfknldks</h1>
         </div>
     )
 }

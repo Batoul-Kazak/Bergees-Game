@@ -4,8 +4,32 @@ import { useState, useEffect, useContext } from "react"
 import { BargeesGameContext } from "../../../contexts/BargeesGameContext"
 
 export default function Kitchen() {
-    const { gameState } = useContext(BargeesGameContext)
+    const { gameState,
+        stonesValue,
+        setStonesValue,
+        playerCurrentScore,
+        setPlayerCurrentScore,
+        playerCurrentCarryScore,
+        setPlayerCurrentCarryScore
+    } = useContext(BargeesGameContext)
     const [gridContent, setGridContent] = useState([]);
+
+    function handleStonesResultName(frontSideStones) {
+        if (frontSideStones === 6)
+            return [6, 0];
+        else if (frontSideStones === 0)
+            return [12, 0];
+        else if (frontSideStones === 5)
+            return [10, 1];
+        else if (frontSideStones === 1)
+            return [24, 1];
+        else if (frontSideStones === 2)
+            return [4, 0];
+        else if (frontSideStones === 3)
+            return [3, 0];
+        else if (frontSideStones === 4)
+            return [2, 0];
+    }
 
     useEffect(() => {
         // const allCells = Array.from({ length: 9 }, (_, i) => i);
@@ -16,7 +40,14 @@ export default function Kitchen() {
             ...Array(FrontSideStones).fill("front"),
             ...Array(BackSideStones).fill("back"),
             null, null, null
-        ]
+        ];
+
+        const stonesValue_ = handleStonesResultName(FrontSideStones)[0];
+        setStonesValue(stonesValue_);
+
+        const stonesCarryValue_ = handleStonesResultName(FrontSideStones)[0];
+        setPlayerCurrentScore(playerCurrentScore => playerCurrentScore + stonesValue_);
+        setPlayerCurrentCarryScore(playerCurrentCarryScore => playerCurrentCarryScore + stonesCarryValue_);
 
         const shuffled = stones.sort(() => Math.random() - 0.5);
         setGridContent(shuffled);
@@ -43,6 +74,7 @@ export default function Kitchen() {
                             {type && <Stone type={type} />}
                             {
                                 type == null && <div className="w-2 h-2 bg-transparent"></div>
+                                // <p className="text-white">{stonesValue}</p>
                             }
                         </div>
                     ))}

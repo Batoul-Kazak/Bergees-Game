@@ -98,7 +98,7 @@ export default function BargeesMiniBoard({ position, startIndex = 0, isTranspare
                     <div key={index} className={`border-[0.5px] rounded-[3px] inset-0 border-wood-700 
                         flex justify-center gap-1 items-center font-bold text-red-950 ${cellClasses}
                         `}>
-
+                        {index}
                         <div className="relative z-10 flex flex-wrap justify-center items-center gap-1 w-full h-full p-1">
                             {isHome && Array.from({ length: inactivePieces }, (_, i) => (
                                 <Player id={i} key={i} player={home} />

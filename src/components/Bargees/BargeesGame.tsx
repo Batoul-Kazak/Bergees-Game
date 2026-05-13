@@ -9,8 +9,9 @@ export default function BargeesGame() {
     const [player1ActiveElements, setPlayer1ActiveElements] = useState(0);
     const [player2ActiveElements, setPlayer2ActiveElements] = useState(0);
     const [playerTurn, setPlayerTurn] = useState("player1");
-    const [stonesValue, setStonesValue] = useState(null); //bara shakkeh binj dast 4 3 2 
+    const [stonesValue, setStonesValue] = useState([]); //[12,0] [6,0] [24,0] [10,1] [4,0] [3,0] [2,0] 
     const [playerCurrentScore, setPlayerCurrentScore] = useState(0);
+    const [playerCurrentCarryScore, setPlayerCurrentCarryScore] = useState(0);
     const [selectedPieceIndex, setSelectedPieceIndex] = useState(-1);
 
     const [globalBoard, setGlobalBoard] = useState<string | null[]>(Array(24).fill(null));
@@ -32,6 +33,8 @@ export default function BargeesGame() {
                 setGameState,
                 playerCurrentScore,
                 setPlayerCurrentScore,
+                playerCurrentCarryScore,
+                setPlayerCurrentCarryScore,
                 selectedPieceIndex,
                 setSelectedPieceIndex,
                 globalBoard,
@@ -41,7 +44,6 @@ export default function BargeesGame() {
                 <GameOptions />
                 <BargeesMainBoard />
             </BargeesGameContext.Provider>
-            <h1 className="text-white">1kndlkfnsdlfknldks</h1>
         </div>
     )
 }

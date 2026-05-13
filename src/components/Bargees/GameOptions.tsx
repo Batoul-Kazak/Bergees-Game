@@ -15,6 +15,8 @@ export default function GameOptions() {
         setGameState,
         playerCurrentScore,
         setPlayerCurrentScore,
+        playerCurrentCarryScore,
+        setPlayerCurrentCarryScore
     } = useContext(BargeesGameContext);
     const optionButtonText = gameState === "idle" ? "Start" : gameState === "waiting" ? "Shake and Throw" : gameState == "playing" ? "..." : "Play Again";
     const instructionText = gameState === "idle" ? "Press the button and start playing" :
@@ -50,7 +52,8 @@ function PlayerInfo({
     player,
     playerActiveElements,
     // setPlayerActiveElements,
-    playerCurrentScore
+    playerCurrentScore,
+    playerCurrentCarryScore
 }) {
     const {
         playerTurn,
@@ -61,7 +64,8 @@ function PlayerInfo({
         <div className="flex gap-5  items-center pb-5 font-bold underline text-center">{player}
             {/* <div className="w-5 rounded-full border-2 border-green-700 h-5 bg-green-500"></div> */}
         </div>
-        <div className="border-b-2 border-black-500 pt-2">Current Score: {playerCurrentScore}</div>
+        <div className="border-b-2 border-black-500 pt-2">Current Score: <span className="text-blue-700">{playerCurrentScore}</span> </div>
+        <div className="border-b-2 border-black-500 pt-2">Current Carry Score: <span className="text-red-700">{playerCurrentCarryScore}</span></div>
         <div className="border-b-2 border-black-500 pt-2"> Turn:<span className={`${playerTurn == player ? "text-green-800" : "text-black-500"}`}> {playerTurn == player ? "yes" : "no"}</span></div>
         <div className="border-b-2 border-black-500 pt-2">Alive Pieces: <span className="font-normal">{playerActiveElements}</span></div>
         <div className="border-b-2 border-black-500 pt-2">Inactive Pieces: <span className="font-normal">{4 - playerActiveElements}</span></div>

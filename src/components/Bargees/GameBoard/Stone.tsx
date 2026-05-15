@@ -3,8 +3,6 @@ import CowrieFrontSide from "./../../../../public/images/CowrieShellFrontSide.pn
 import CowrieBackSide from "./../../../../public/images/CowrieShellBackSide.png"
 
 export default function Stone({ type = "front" }) {
-
-
     return (
         <div>
             {type == "front" ? <img src={CowrieFrontSide} alt="stone1" className="w-10 h-10 object-contain rounded-full" />

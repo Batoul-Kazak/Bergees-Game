@@ -5,12 +5,12 @@ import { BargeesGameContext } from "../../../contexts/BargeesGameContext"
 
 export default function Kitchen() {
     const { gameState,
-        stonesValue,
-        setStonesValue,
-        playerCurrentScore,
-        setPlayerCurrentScore,
-        playerCurrentCarryScore,
-        setPlayerCurrentCarryScore
+        currentCowriesValue,
+        setCurrentCowriesValue,
+        playerCowriesScore,
+        setPlayerCowriesScore,
+        playerCowriesCarryScore,
+        setPlayerCowriesCarryScore
     } = useContext(BargeesGameContext)
     const [gridContent, setGridContent] = useState([]);
 
@@ -42,12 +42,12 @@ export default function Kitchen() {
             null, null, null
         ];
 
-        const stonesValue_ = handleStonesResultName(FrontSideStones)[0];
-        setStonesValue(stonesValue_);
+        const currentCowriesValue_ = handleStonesResultName(FrontSideStones)[0];
+        setCurrentCowriesValue(currentCowriesValue_);
 
         const stonesCarryValue_ = handleStonesResultName(FrontSideStones)[0];
-        setPlayerCurrentScore(playerCurrentScore => playerCurrentScore + stonesValue_);
-        setPlayerCurrentCarryScore(playerCurrentCarryScore => playerCurrentCarryScore + stonesCarryValue_);
+        setPlayerCowriesScore(playerCowriesScore => playerCowriesScore + currentCowriesValue_);
+        setPlayerCowriesCarryScore(playerCowriesCarryScore => playerCowriesCarryScore + stonesCarryValue_);
 
         const shuffled = stones.sort(() => Math.random() - 0.5);
         setGridContent(shuffled);
@@ -74,7 +74,7 @@ export default function Kitchen() {
                             {type && <Stone type={type} />}
                             {
                                 type == null && <div className="w-2 h-2 bg-transparent"></div>
-                                // <p className="text-white">{stonesValue}</p>
+                                // <p className="text-white">{currentCowriesValue}</p>
                             }
                         </div>
                     ))}

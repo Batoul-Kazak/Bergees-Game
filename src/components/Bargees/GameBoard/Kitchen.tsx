@@ -5,8 +5,6 @@ import { BargeesGameContext } from "../../../contexts/BargeesGameContext"
 
 export default function Kitchen() {
     const { gameState,
-        currentCowriesValue,
-        setCurrentCowriesValue,
         playerCowriesScore,
         setPlayerCowriesScore,
         playerCowriesCarryScore,
@@ -43,7 +41,7 @@ export default function Kitchen() {
         ];
 
         const currentCowriesValue_ = handleStonesResultName(FrontSideStones)[0];
-        setCurrentCowriesValue(currentCowriesValue_);
+        setPlayerCowriesScore(currentCowriesValue_);
 
         const stonesCarryValue_ = handleStonesResultName(FrontSideStones)[0];
         setPlayerCowriesScore(playerCowriesScore => playerCowriesScore + currentCowriesValue_);
@@ -74,7 +72,7 @@ export default function Kitchen() {
                             {type && <Stone type={type} />}
                             {
                                 type == null && <div className="w-2 h-2 bg-transparent"></div>
-                                // <p className="text-white">{currentCowriesValue}</p>
+                                // <p className="text-white">{currentCowrieValues}</p>
                             }
                         </div>
                     ))}

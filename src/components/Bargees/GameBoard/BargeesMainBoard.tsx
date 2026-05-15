@@ -9,10 +9,17 @@ import { PLAYER_1_REST_CELLS, WIN_CELLS } from '../../../constants/boardWinCells
 import { PLAYER_2_REST_CELLS } from '../../../constants/boardWinCells'
 import { SAFE_CELLS, PLAYER_1_HOME_2, PLAYER_1_HOME_1, PLAYER_2_HOME_1, PLAYER_2_HOME_2 } from '../../../constants/boardHomes'
 import Stone from './Stone'
+import Player from './Player'
 
 export default function BargeesMainBoard() {
     const GRID_SIZE = 19;
-    const { cowriesGrid, setPlayerCowriesScore, currentCowriesValue, setCurrentCowriesValue, boardPieces } = useContext(BargeesGameContext);
+    const { cowriesGrid, setPlayerCowriesScore,
+          boardPieces,
+            player1PiecesIndices,
+            player2PiecesIndices,
+            setPlayer1PiecesIndices,
+            setPlayer2PiecesIndices,
+        } = useContext(BargeesGameContext);
     // const [idx, setIdx] = useState(0);
 
     function ShouldHideCell(index) {
@@ -57,12 +64,15 @@ export default function BargeesMainBoard() {
                 const isHidden = ShouldHideCell(index);
                 const winCellIndex = WIN_CELLS.indexOf(index);
                 const stoneType = winCellIndex !== -1 ? cowriesGrid[winCellIndex] : null;
+                
                 return (
-                    <div key={index} className={`border-[0.5px] inset-0 
+                    <div key={index} className={`border-[0.5px] inset-0 relative
                         flex justify-center items-center ${StoneColor(index)} font-bold text-red-950 text-[12px] w-9 h-9`}
                     >
-                        {!isHidden && !WIN_CELLS.includes(index) && index}
+                        {!isHidden && !WIN_CELLS.includes(index) && index }
                         {stoneType && <Stone type={stoneType} />}
+                        {!isHidden && !WIN_CELLS.includes(index) && (player1PiecesIndices.includes(index)) && <Player player="player1" /> }
+                        {!isHidden && !WIN_CELLS.includes(index) && (player2PiecesIndices.includes(index)) && <Player player="player2" /> }
                     </div>
                 )
             })}

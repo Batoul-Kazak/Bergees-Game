@@ -13,20 +13,27 @@ export default function BargeesGame() {
     const [player1ActiveElements, setPlayer1ActiveElements] = useState(0);
     const [player2ActiveElements, setPlayer2ActiveElements] = useState(0);
     const [playerTurn, setPlayerTurn] = useState("player1");
-    const [currentCowriesValue, setCurrentCowriesValue] = useState(); //dust, binj, shakeh, barah, two, three, four 
+ 
+    const [currentPlayerScore, setCurrentPlayerScore] = useState([]); // [] array that stores two scores [the full, the rest of binj and dust] 
+     //the sum of dust, binj...etc 
+    // needed especially when you have binj and creation at home1 so the rest is 14  
 
-    const [playerCowriesScore, setPlayerCowriesScore] = useState([]); ////dust, binj, shakeh, barah, two, three, four 
-
-    //REMOVE THIS NO LONGER NEEDED
-    const [playerCowriesCarryScore, setPlayerCowriesCarryScore] = useState(0);
+    const [playerCowriesScore, setPlayerCowriesScore] = useState([]); //dust, binj, shakeh, bara, two, three, four 
 
     const [selectedPieceIndex, setSelectedPieceIndex] = useState(-1);
-    const [Player1WonPieces, setPlayer1WonPieces] = useState(0);
-    const [Player2WonPieces, setPlayer2WonPieces] = useState(0);
+    const [player1WonPieces, setPlayer1WonPieces] = useState(0);
+    const [player2WonPieces, setPlayer2WonPieces] = useState(0);
 
     const [isShowCreationDialog, setIsShowCreationDialog] = useState(false);
     const [dialogAction, setDialogAction] = useState(null);
     const [cowriesGrid, setCowriesGrid] = useState([]);
+
+    const [player1PiecesIndices, setPlayer1PiecesIndices] = useState([-1,-1,-1,-1]); //-1 means not activated pieces 
+
+    //###THIS RULE IS NO LONGER NEEDED
+            //and each piece created added to the end of the array (in ordered way)
+            //e.g. [-1,4,102,6] and [-1,-1,-1,5] are correct but [-1,3,5,-1] and [5, -1, -1, -1] aren't allowed
+    const [player2PiecesIndices, setPlayer2PiecesIndices] = useState([-1,-1,-1,-1]);
     
     // const [globalBoard, setGlobalBoard] = useState<string | null[]>(Array(24).fill(null));
 
@@ -41,27 +48,29 @@ export default function BargeesGame() {
                 setPlayer2ActiveElements,
                 playerTurn,
                 setPlayerTurn,
-                currentCowriesValue,
-                setCurrentCowriesValue,
                 gameState,
                 setGameState,
                 playerCowriesScore,
                 setPlayerCowriesScore,
-                playerCowriesCarryScore,
-                setPlayerCowriesCarryScore,
+                setCurrentPlayerScore,
+                currentPlayerScore,
                 selectedPieceIndex,
                 setSelectedPieceIndex,
                 dialogAction,
                 setDialogAction,
                 setPlayer1WonPieces,
-                Player1WonPieces,
+                player1WonPieces,
                 setPlayer2WonPieces,
-                Player2WonPieces,
+                player2WonPieces,
                 boardPieces,
                 setBoardPieces,
                 cowriesGrid,
                 setCowriesGrid,
-                setIsShowCreationDialog
+                setIsShowCreationDialog,
+                player1PiecesIndices,
+                setPlayer1PiecesIndices,
+                player2PiecesIndices,
+                setPlayer2PiecesIndices
             }}
             >
 

@@ -1,10 +1,7 @@
-import { useState, useContext, useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { BargeesGameContext } from "../../contexts/BargeesGameContext";
 
-import { PLAYER_1_HOME_1 } from "../../constants/boardHomes";
-import { PLAYER_1_HOME_2 } from "../../constants/boardHomes";
-import { PLAYER_2_HOME_1 } from "../../constants/boardHomes";
-import { PLAYER_2_HOME_2 } from "../../constants/boardHomes";
+import { COWRIE_VALUES } from "../../constants/CowrieValues";
 
 export default function GameOptions() {
   const {
@@ -14,16 +11,14 @@ export default function GameOptions() {
     setPlayer2ActiveElements,
     playerTurn,
     setPlayerTurn,
-    currentCowriesValue,
-    setCurrentCowriesValue,
     gameState,
     setGameState,
     playerCowriesScore,
     setPlayerCowriesScore,
-    playerCowriesCarryScore,
-    setPlayerCowriesCarryScore,
-    Player1WonPieces,
-    Player2WonPieces,
+     setCurrentPlayerScore,
+currentPlayerScore,
+    player1WonPieces,
+    player2WonPieces,
     setCowriesGrid,
     setIsShowCreationDialog,
     isShowCreationDialog,
@@ -41,9 +36,24 @@ export default function GameOptions() {
     (playerCowriesScore.includes("dust") ||
       playerCowriesScore.includes("binj"));
 
+  function calculateCurrentPlayerScore()
+  {
+      let totalSum1 = 0;
+      let totalSum2 = 0;
+      playerCowriesScore.forEach(val => {
+        const match = COWRIE_VALUES.find(obj => obj.cowriesName === val);
+        if(match)
+        {
+          totalSum1 += match.actualValue[0];
+          totalSum2 += match.actualValue[1];
+        }
+      });
+      return [totalSum1, totalSum2];
+  }
+
   function handleCowriesResult(frontSideStones) {
     if (frontSideStones === 6) return "shakeh";
-    else if (frontSideStones === 0) return "barah";
+    else if (frontSideStones === 0) return "bara";
     else if (frontSideStones === 5) return "dust";
     else if (frontSideStones === 1) return "binj";
     else if (frontSideStones === 2) return "four";
@@ -97,6 +107,7 @@ export default function GameOptions() {
 
     const currentCowriesValue_ = handleCowriesResult(frontSideCowries);
     setPlayerCowriesScore((curValues) => [...curValues, currentCowriesValue_]);
+    
   }
 
   function handleCreateElement() {
@@ -128,6 +139,9 @@ export default function GameOptions() {
       setGameState("playing");
       return;
     }
+
+    const UPDATED_CURRENT_PLAYER_SCORE = calculateCurrentPlayerScore();
+    setCurrentPlayerScore(UPDATED_CURRENT_PLAYER_SCORE);
   }, [playerCowriesScore, gameState]);
 
   useEffect(() => {
@@ -152,16 +166,18 @@ export default function GameOptions() {
         Bergees Game
       </h2>
       <h1 className=" border-black-500 font-bold pt-2">{playerTurn} Turn</h1>
-      <h2 className="pt-4 font-bold">Cowries Value: {currentCowriesValue} </h2>
-      <div className="pt-2 font-bold place-self-start pl-4 flex gap-2">
-        Current Score:{" "}
-        <div className=" flex flex-wrap gap-1">
+      <h2 className="pt-4 font-bold">Total Cowries Value: {currentPlayerScore[0]+currentPlayerScore[1] || "0"} </h2>
+      <h2 className="pt-4 font-bold">Main Cowries Value: {currentPlayerScore[0] || "0"} </h2>
+      <h2 className="pt-4 font-bold">Rest Cowries Value: {currentPlayerScore[1] || "0"} </h2>
+      <div className="pt-2 font-bold place-self-start pl-4 flex gap-1">
+        Current Score:
+        <div className="pr-4 font-normal flex flex-wrap gap-1">
           {playerCowriesScore.map((s, index) => (
             <span key={index} className="bg-red-700 px-2 rounded-2xl">
               {s}
             </span>
           ))}
-        </div>{" "}
+        </div>
       </div>
 
       <div className="p-4 flex justify-around w-full">
@@ -169,14 +185,14 @@ export default function GameOptions() {
           player="player1"
           playerActiveElements={player1ActiveElements}
           setPlayerActiveElements={setPlayer1ActiveElements}
-          playerWonPieces={Player1WonPieces}
+          playerWonPieces={player1WonPieces}
         />
         <div className="h-30 w-px place-self-center bg-wood-700"></div>
         <PlayerInfo
           player="player2"
           playerActiveElements={player2ActiveElements}
           setPlayerActiveElements={setPlayer2ActiveElements}
-          playerWonPieces={Player2WonPieces}
+          playerWonPieces={player2WonPieces}
         />
       </div>
       <div className="flex flex-col gap-2 font-bold">

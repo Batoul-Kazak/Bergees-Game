@@ -32,7 +32,7 @@ export default function Player({ player, id }) {
     const isActiveStyle = isSelected ? "ring-4 ring-yellow-500 scale-125 opacity-100 shadow-lg z-20" : "opacity-90 hover:scale-110";
 
     return (
-        <div className={`w-3 h-3 rounded-full cursor-pointer transition-all duration-200 border-2 border-white
+        <div className={`w-4 h-4 rounded-full absolute cursor-pointer transition-all duration-200 border-2 border-white
              ${isActiveStyle}
              `}
             style={{

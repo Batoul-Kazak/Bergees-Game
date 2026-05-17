@@ -18,7 +18,7 @@ import {
   PLAYER_2_HOME_1,
   PLAYER_2_HOME_2,
 } from "../../../constants/boardHomes";
-import Stone from "./Stone";
+import Cowrie from "./Cowrie";
 import Player from "./Player";
 import { PATH_1_INDICES } from "../../../utils/pathUtils";
 import { getTargetOnPath } from "../../../utils/getTargetOnPath";
@@ -283,7 +283,7 @@ export default function BargeesMainBoard() {
             onClick={() => handleStoneClicked(index)}
           >
             {!isHidden && !WIN_CELLS.includes(index) && index}
-            {stoneType && <Stone type={stoneType} />}
+            {stoneType && <Cowrie type={stoneType} />}
             {!isHidden &&
               !WIN_CELLS.includes(index) &&
               player1PiecesIndices.includes(index) &&

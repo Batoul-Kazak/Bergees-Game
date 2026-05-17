@@ -16,11 +16,11 @@ export default function CreationDialog({ actionType = null }) {
     player2PiecesIndices,
     setPlayer1PiecesIndices,
     setPlayer2PiecesIndices,
-    playerCowriesScore,
-    setPlayerCowriesScore
+    availableMoveNames,
+    setAvailableMoveNames
   } = useContext(BargeesGameContext);
 
-  const CAN_CREATE_AT_SECONDARY_HOME = playerCowriesScore.includes("binj");
+  const CAN_CREATE_AT_SECONDARY_HOME = availableMoveNames.includes("binj");
 
   function handleCreateElement() {
     if (playerTurn === "player1") {
@@ -63,7 +63,7 @@ export default function CreationDialog({ actionType = null }) {
     else if(playerTurn === "player2")
       updateSpecificIdx(PLAYER_2_HOME_1, player2PiecesIndices, setPlayer2PiecesIndices );
     
-    removeFirstItem("dust", playerCowriesScore, setPlayerCowriesScore);
+    removeFirstItem("dust", availableMoveNames, setAvailableMoveNames);
     setIsShowCreationDialog(false);
   }
 
@@ -74,7 +74,7 @@ export default function CreationDialog({ actionType = null }) {
   else if(playerTurn === "player2")
      updateSpecificIdx(PLAYER_2_HOME_2, player1PiecesIndices, setPlayer1PiecesIndices);
   
-  removeFirstItem("binj", playerCowriesScore, setPlayerCowriesScore);
+  removeFirstItem("binj", availableMoveNames, setAvailableMoveNames);
   setIsShowCreationDialog(false);
   }
 

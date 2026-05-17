@@ -1,4 +1,4 @@
-import { useEffect, useContext, useState } from 'react';
+import { useEffect, useContext, useState } from "react";
 import { BargeesGameContext } from "../../../contexts/BargeesGameContext";
 import {
   FORBIDDEN_CELLS,
@@ -20,10 +20,12 @@ import {
 } from "../../../constants/boardHomes";
 import Cowrie from "./Cowrie";
 import Player from "./Player";
-import { PATH_1_INDICES } from "../../../utils/pathUtils";
+import { PATH_1_INDICES, PATH_2_INDICES } from "../../../utils/pathUtils";
 import { getTargetOnPath } from "../../../utils/getTargetOnPath";
+import { COWRIE_VALUES } from "../../../constants/CowrieValues";
 // import { usePieceMove } from "../../../hooks/usePieceMove";
 // import { useSelectedPiece } from "../../../hooks/useSelectedPiece";
+import { convertCowriesType } from "../../../utils/convertCowriesType";
 export default function BargeesMainBoard() {
   const GRID_SIZE = 19;
   const {
@@ -33,14 +35,22 @@ export default function BargeesMainBoard() {
     player2PiecesIndices,
     setPlayer1PiecesIndices,
     setPlayer2PiecesIndices,
-    currentPlayerScore,
+    availableMoves,
     selectedPieceIndex,
     playerTurn,
+    availableMoveNames,
+    setAvailableMoveNames,
+    setAvailableMoves,
   } = useContext(BargeesGameContext);
   // const [idx, setIdx] = useState(0);
   // const {getAvailableSquares} = usePieceMove();
   // const {getSelectedPieceIndex} = useSelectedPiece();
   const [availableCells, setAvailableCells] = useState([]);
+  // const [updatedCowrieResult, setUpdatedCowrieResult] = useState(availableMoves);
+  const [
+    lastAvailableStoneClickedPosition,
+    setLastAvailableStoneClickedPosition,
+  ] = useState(-1);
 
   function preventedCell(index) {
     const row = Math.floor(index / GRID_SIZE);
@@ -61,9 +71,11 @@ export default function BargeesMainBoard() {
 
     if (preventedCell(index)) return "bg-black border-black";
     else if (PLAYER_1_HOME_1 === index || PLAYER_1_HOME_2 === index)
-      baseStyle = "bg-linear-90 from-blue-500 to-blue-700 rounded-xl shadow-2xl shadow-white";
+      baseStyle =
+        "bg-linear-90 from-blue-500 to-blue-700 rounded-xl shadow-2xl shadow-white";
     else if (PLAYER_2_HOME_1 === index || PLAYER_2_HOME_2 === index)
-      baseStyle = "bg-linear-90 from-purple-500 to-purple-700 rounded-xl shadow-2xl shadow-white";
+      baseStyle =
+        "bg-linear-90 from-purple-500 to-purple-700 rounded-xl shadow-2xl shadow-white";
     else if (SAFE_CELLS.includes(index))
       baseStyle = "bg-linear-90 from-yellow-400 to-yellow-800 rounded-[4px]";
     else if (
@@ -74,7 +86,8 @@ export default function BargeesMainBoard() {
     else baseStyle = "bg-linear-90 from-wood-200 to-wood-700 rounded-[4px]";
 
     const isAvailable = availableCells.flat().includes(index);
-    if(isAvailable) return `${baseStyle} ring-4 ring-green-400 z-10 bg-green-500 `;
+    if (isAvailable)
+      return `${baseStyle} ring-4 ring-green-400 z-10 bg-green-500 `;
 
     return baseStyle;
   }
@@ -90,62 +103,46 @@ export default function BargeesMainBoard() {
   }
 
   function getSelectedPieceCellPosition() {
-    // console.log(getSelectedPieceCellPosition);
     if (selectedPieceIndex === -1 || selectedPieceIndex === null) return -1;
 
     const [player, pieceIdStr] = selectedPieceIndex.split("-");
     const pieceId = parseInt(pieceIdStr);
 
     const playerPiecesIndices =
-    playerTurn === "player1" ? player1PiecesIndices : player2PiecesIndices;
-    
-    // const selectedPlayerPosition = playerPiecesIndices[pieceId];
-    const selectedPlayerPosition = playerPiecesIndices.find((pos, i) => i === pieceId);
+      playerTurn === "player1" ? player1PiecesIndices : player2PiecesIndices;
+
+    const selectedPlayerPosition = playerPiecesIndices.find(
+      (pos, i) => i === pieceId,
+    );
     return selectedPlayerPosition;
   }
 
   function getAvailableSquares() {
     const START_INDEX = getSelectedPieceCellPosition();
-    
-    const availableSquares = []; // e.g.[{squareNumber: 234, cost: "10"}] //10 means dust without carry
-    
-    currentPlayerScore.forEach((score) => { 
+
+    const availableSquares = [];
+
+    availableMoves.forEach((score) => {
       if (!selectedPieceIndex || selectedPieceIndex === -1) return;
 
       console.log("player1 path: ", PATH_1_INDICES);
-      // const TARGET_CELL_POSITION_1 = START_INDEX + score[0];  //this is wrong because the path is not a regular square
-      // const TARGET_CELL_POSITION_2 = START_INDEX + score[1];
 
-      const TARGET_CELL_POSITION_1 = getTargetOnPath(playerTurn, START_INDEX, score[0]);
-      const TARGET_CELL_POSITION_2 = getTargetOnPath(playerTurn, START_INDEX, score[1]);
-      // console.log("TTTTTTTTTT: ", TARGET_CELL_POSITION_1); //number
+      const TARGET_CELL_POSITION_1 = getTargetOnPath(
+        playerTurn,
+        START_INDEX,
+        score[0],
+      );
+      const TARGET_CELL_POSITION_2 = getTargetOnPath(
+        playerTurn,
+        START_INDEX,
+        score[1],
+      );
 
-      // const END_INDEX_1 =
-      //   playerTurn === "player1"
-      //     ? PATH_1_INDICES.indexOf(TARGET_CELL_POSITION_1)
-      //     : PATH_2_INDICES.indexOf(TARGET_CELL_POSITION_1);
-      // const END_INDEX_2 =
-      //   playerTurn === "player1"
-      //     ? PATH_1_INDICES.indexOf(TARGET_CELL_POSITION_2)
-      //     : PATH_2_INDICES.indexOf(TARGET_CELL_POSITION_2);
-
-      // let newValue1 = {};
-      // let newValue2 = {};
-
-      // if (END_INDEX_1 === END_INDEX_2) {
-      //   newValue1 = { squareIdx: END_INDEX_1, cost: score[0] };
-      //   availableSquares.push(newValue1);
-      // } else {
-      //   newValue1 = { squareIdx: END_INDEX_1, cost: score[0] };
-      //   newValue2 = { squareIdx: END_INDEX_2, cost: score[1] };
-
-      //   availableSquares.push(newValue1);
-      //   availableSquares.push(newValue2);
-      // }
       const isEqual = TARGET_CELL_POSITION_1 === TARGET_CELL_POSITION_2;
-      const position = isEqual ? TARGET_CELL_POSITION_1 : [TARGET_CELL_POSITION_1, TARGET_CELL_POSITION_2];
+      const position = isEqual
+        ? TARGET_CELL_POSITION_1
+        : [TARGET_CELL_POSITION_1, TARGET_CELL_POSITION_2];
       availableSquares.push(position);
-      // setAvailableCells(availableCells => [...availableCells, position]);
     });
     return availableSquares;
   }
@@ -154,8 +151,10 @@ export default function BargeesMainBoard() {
     // if(gameState !== "playing") return;
 
     //Prevent player from walking on unAllowed stones for him
+    if (preventedCell(targetCellIdx)) return;
+
     let ALLOWED_TO_MOVE = true;
-    if (preventedCell(targetCellIdx)) ALLOWED_TO_MOVE = false;
+    // if (preventedCell(targetCellIdx)) ALLOWED_TO_MOVE = false;
 
     ALLOWED_TO_MOVE = CheckIfCanMove(
       FORBIDDEN_CELLS,
@@ -176,42 +175,40 @@ export default function BargeesMainBoard() {
       );
 
     //Prevent player from walking if doesn't have enough score
-    if (currentPlayerScore.length === 0) return;
+    if (availableMoves.length === 0) return;
 
     const SELECTED_PIECE_POSITION = getSelectedPieceCellPosition();
 
     console.log("selected piece position: ", SELECTED_PIECE_POSITION);
 
-    if (
-      SELECTED_PIECE_POSITION === -1 ||
-      SELECTED_PIECE_POSITION === null ||
-      SELECTED_PIECE_POSITION === undefined
-    )
+    if (SELECTED_PIECE_POSITION === -1 || SELECTED_PIECE_POSITION === null)
       return;
 
-    const startIndex =
-      playerTurn === "player1"
-        ? PATH_1_INDICES.indexOf(SELECTED_PIECE_POSITION)
-        : PATH_2_INDICES.indexOf(SELECTED_PIECE_POSITION);
-    const endIndex =
-      playerTurn === "player1"
-        ? PATH_1_INDICES.indexOf(targetCellIdx)
-        : PATH_2_INDICES.indexOf(targetCellIdx);
+    const currentPath =
+      playerTurn === "player1" ? PATH_1_INDICES : PATH_2_INDICES;
+    const startIndex = currentPath.indexOf(SELECTED_PIECE_POSITION);
+    const endIndex = currentPath.indexOf(targetCellIdx);
 
     if (startIndex === -1 || endIndex === -1) return;
 
-    const distance = endIndex - startIndex - 1;
-    console.log("distance: ", distance);
+    // let stepsTaken = endIndex - startIndex;
+    // console.log("stepsTaken: ", stepsTaken);
+
+    // if(stepsTaken < 0) stepsTaken += currentPath.length;
 
     const MOVES = getAvailableSquares();
+    if (!MOVES.flat().includes(targetCellIdx)) return;
 
-    if(!MOVES.flat().includes(targetCellIdx)) ALLOWED_TO_MOVE = false;
-
-    console.log("available squares: ", availableCells, "target cell idx: ", targetCellIdx);
+    console.log(
+      "available squares: ",
+      availableCells,
+      "target cell idx: ",
+      targetCellIdx,
+    );
 
     if (!ALLOWED_TO_MOVE) return;
 
-    if (selectedPieceIndex === -1 || selectedPieceIndex === null) return;
+    // if (selectedPieceIndex === -1 || selectedPieceIndex === null) return;
 
     const [selectedPlayer, selectedPieceIdxStr] = selectedPieceIndex.split("-"); //player1-0 => [player1, 0]
     const selectedPieceIdx = parseInt(selectedPieceIdxStr);
@@ -223,14 +220,55 @@ export default function BargeesMainBoard() {
       selectedPlayer === "player1"
         ? setPlayer1PiecesIndices
         : setPlayer2PiecesIndices;
+
     setPieces((prev) => {
       const newArr = [...prev];
       newArr[selectedPieceIdx] = targetCellIdx;
       return newArr;
     });
 
-    // setSelectedPieceIndex(-1);
-    // console.log(idx + "  " + player1PiecesIndices);
+    const usedScoreIndex = availableMoves.findIndex((scoreItem) => {
+      const calculatedPos = getTargetOnPath(
+        playerTurn,
+        SELECTED_PIECE_POSITION,
+        scoreItem[0],
+      );
+      return calculatedPos === targetCellIdx;
+    });
+
+    if (usedScoreIndex === -1) return;
+
+      // const usedScoreItem = availableMoves[usedScoreIndex];
+
+      // setAvailableMoves((prevScores) => {
+      //   const newScores = [...prevScores];
+      //   newScores.splice(usedScoreIndex, 1);
+      //   return newScores;
+      // });
+
+      // if (usedScoreItem) {
+      //   const COWRIE_OBJ = COWRIE_VALUES.find(
+      //     (item) =>
+      //       item.actualValue[0] === usedScoreItem[0] &&
+      //       item.actualValue[1] === usedScoreItem[1],
+      //   );
+
+      //   if (COWRIE_OBJ) {
+      //     setAvailableMoveNames((prev) => [...prev, COWRIE_OBJ.cowriesName]);
+      //   }
+      // }
+
+      setAvailableMoves((prev) => {
+        const newMoves = [...prev];
+        newMoves.splice(usedScoreIndex, 1);
+        return newMoves;
+      });
+
+      setAvailableMoveNames((prev) => {
+        const newMoveNames = [...prev];
+        newMoveNames.splice(usedScoreIndex, 1);
+        return newMoveNames; 
+      });
   }
 
   //   useEffect(() => {
@@ -245,18 +283,20 @@ export default function BargeesMainBoard() {
   //   }, []);
 
   useEffect(() => {
-    if(selectedPieceIndex !== -1 && selectedPieceIndex !== null)
-    {
+    if (selectedPieceIndex !== -1 && selectedPieceIndex !== null) {
       const moves = getAvailableSquares();
       setAvailableCells(moves);
-      
-      // if(!availableSquares.flat().includes(targetCellIdx)) ALLOWED_TO_MOVE = false;
     } else {
       setAvailableCells([]);
     }
-      console.log(selectedPieceIndex);
-    // console.log(PATH_2_INDICES);
-  }, [selectedPieceIndex, currentPlayerScore, playerTurn, player1PiecesIndices, player2PiecesIndices]);
+    console.log(selectedPieceIndex);
+  }, [
+    selectedPieceIndex,
+    availableMoves,
+    playerTurn,
+    player1PiecesIndices,
+    player2PiecesIndices,
+  ]);
 
   return (
     <div

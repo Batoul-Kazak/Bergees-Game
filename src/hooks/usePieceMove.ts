@@ -11,7 +11,7 @@ export function usePieceMove()
 {
      function getAvailableSquaresWithCost()
     {
-    const {currentPlayerScore, playerTurn, selectedPieceIndex} = useContext(BargeesGameContext);
+    const {availableMoves, playerTurn, selectedPieceIndex} = useContext(BargeesGameContext);
     const {getSelectedPieceIndex} = useSelectedPiece();
     
     const SELECTED_PIECE_POSITION = getSelectedPieceIndex();
@@ -19,7 +19,7 @@ export function usePieceMove()
     
     const availableSquares = []; // e.g.[{squareNumber: 234, cost: "10"}] //10 means dust without carry
     
-    currentPlayerScore.forEach(score => {
+    availableMoves.forEach(score => {
         if(!selectedPieceIndex || selectedPieceIndex === -1) return;
 
         const value = score[0]; //dust [10]

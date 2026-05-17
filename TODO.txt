@@ -1,0 +1,19 @@
+TODO: 
+***Main Features
+    -remove background for player1 and player2 images to be transparent
+    -complete fixing the logic for updating cowries scores correctly corresponding to UI
+    -make sure the player2 has the exact functionalities for player1
+    -show a number (in case many player pieces are setting on the same square)
+    -player1 can kill player2 and vise versa
+
+***Extra Features:
+    1.make the website with Navbar and many settings 
+        -light/dark mode
+        -color themes
+        -hide and show steps
+        -add help text to advice/to tell info about what is (happening/what should do) during game flow
+        -player vs player || player vs computer (in this case make computer use random array for every every piece move)
+        -play with timer || without timer 
+        -activate/don't activate safe mood (activates cells are no longer highlighted)
+    2.help a page contains many images (screenshots from the same game) with text explains for each step/situation + maybe video
+    3.about page creator/website

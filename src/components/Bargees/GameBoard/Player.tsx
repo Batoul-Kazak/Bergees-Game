@@ -27,17 +27,17 @@ export default function Player({ player, id }) {
         }
     }
 
-    const isActiveStyle = isSelected ? "ring-1 ring-yellow-500 scale-122 opacity-100 shadow-lg z-20 border-0" : "opacity-90 hover:scale-110";
+    const isActiveStyle = isSelected ? "ring-yellow-500 scale-125 opacity-100 shadow-lg z-20 border-0" : "opacity-90 hover:scale-110";
 
     return (
-        <div className={`w-7 h-14 rotate-z-35 z-100 top-[50%] left-[50%] translate-x-[-30%] translate-y-[-70%] rounded-full absolute cursor-pointer transition-all duration-200
+        <div className={`w-7 h-14 rotate-z-40  ${player === "player1" ? "" : "rotate-y-0"} z-100 top-[30%] left-[70%] translate-x-[-30%] translate-y-[-70%] rounded-full absolute cursor-pointer transition-all duration-200
              ${isActiveStyle}
              `}
             style={{
                 backgroundImage: `url(${player == "player1" ? player1Img : player2Img})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
-                backgroundColor: player === "player1" ? "#334499" : "#992277", 
+                // backgroundColor: player === "player1" ? "#334499" : "#992277", 
             }}
             onClick={(e) => handleClick(e)}
         ></div>

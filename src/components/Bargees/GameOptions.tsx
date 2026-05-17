@@ -2,6 +2,8 @@ import { useContext, useEffect } from "react";
 import { BargeesGameContext } from "../../contexts/BargeesGameContext";
 
 import { COWRIE_VALUES } from "../../constants/CowrieValues";
+// import { getCowriesNumericResult } from "../../utils/getCowriesNumericResult";
+// import { getCowriesStringResult } from "../../utils/getCowriesNumericResult";
 
 export default function GameOptions() {
   const {
@@ -13,10 +15,10 @@ export default function GameOptions() {
     setPlayerTurn,
     gameState,
     setGameState,
-    playerCowriesScore,
-    setPlayerCowriesScore,
-     setCurrentPlayerScore,
-currentPlayerScore,
+    availableMoveNames,
+    setAvailableMoveNames,
+     setAvailableMoves,
+availableMoves,
     player1WonPieces,
     player2WonPieces,
     setCowriesGrid,
@@ -33,14 +35,14 @@ currentPlayerScore,
           : ""; //or just play rather than Move or Create
   const canCreateElement =
     (gameState === "shaking" || gameState === "playing") &&
-    (playerCowriesScore.includes("dust") ||
-      playerCowriesScore.includes("binj"));
+    (availableMoveNames.includes("dust") ||
+      availableMoveNames.includes("binj"));
 
-  function calculateCurrentPlayerScore()
+  function calculateavailableMoves()
   {
       let totalSum1 = 0;
       let totalSum2 = 0;
-      playerCowriesScore.forEach(val => {
+      availableMoveNames.forEach(val => {
         const match = COWRIE_VALUES.find(obj => obj.cowriesName === val);
         if(match)
           {
@@ -51,27 +53,28 @@ currentPlayerScore,
       return [totalSum1, totalSum2];
   }
 
-  function handleCowriesStringResult(frontSideStones) {
-    if (frontSideStones === 6) return "shakeh";
-    else if (frontSideStones === 0) return "bara";
-    else if (frontSideStones === 5) return "dust";
-    else if (frontSideStones === 1) return "binj";
-    else if (frontSideStones === 2) return "four";
-    else if (frontSideStones === 3) return "three";
-    else if (frontSideStones === 4) return "two";
-    else return "none"
-  }
+    function getCowriesStringResult(frontSideStones) {
+      if (frontSideStones === 6) return "shakeh";
+      else if (frontSideStones === 0) return "bara";
+      else if (frontSideStones === 5) return "dust";
+      else if (frontSideStones === 1) return "binj";
+      else if (frontSideStones === 2) return "four";
+      else if (frontSideStones === 3) return "three";
+      else if (frontSideStones === 4) return "two";
+      else return "none"
+    }
 
-   function handleCowriesNumericResult(frontSideStones) {
-    if (frontSideStones === 6) return [6, 0];
-    else if (frontSideStones === 0) return [12,0];
-    else if (frontSideStones === 5) return [10,1];
-    else if (frontSideStones === 1) return [24,1];
-    else if (frontSideStones === 2) return [4,0];
-    else if (frontSideStones === 3) return [3,0];
-    else if (frontSideStones === 4) return [2,0];
-    else return [0,0];
-  }
+     function getCowriesNumericResult(frontSideStones) {
+        if (frontSideStones === 6) return [6, 0];
+        else if (frontSideStones === 0) return [12,0];
+        else if (frontSideStones === 5) return [10,1];
+        else if (frontSideStones === 1) return [24,1];
+        else if (frontSideStones === 2) return [4,0];
+        else if (frontSideStones === 3) return [3,0];
+        else if (frontSideStones === 4) return [2,0];
+        else return [0,0];
+      }
+  
 
   function toArray(...elements) 
   {
@@ -104,22 +107,22 @@ currentPlayerScore,
       const shuffled = cowries.sort(() => Math.floor(Math.random() - 0.5));
       setCowriesGrid(shuffled);
 
-      const currentCowriesStrValue_ = handleCowriesStringResult(frontSideCowries); //stale state for that last item didn't get updated
-      setPlayerCowriesScore((curValues) => [
+      const currentCowriesStrValue_ = getCowriesStringResult(frontSideCowries); //stale state for that last item didn't get updated
+      setAvailableMoveNames((curValues) => [
         ...curValues,
         currentCowriesStrValue_,
       ]);
 
-    const currentCowriesNumericValue_ = handleCowriesNumericResult(frontSideCowries); //this will be set as two numbers not array of 2 elements
+    const currentCowriesNumericValue_ = getCowriesNumericResult(frontSideCowries); //this will be set as two numbers not array of 2 elements
     // Maybe i have to convert currentCowriesNumericValue to array before assign it
     console.log("...........")
-    setCurrentPlayerScore(prev => [...prev, currentCowriesNumericValue_]); 
+    setAvailableMoves(prev => [...prev, currentCowriesNumericValue_]); 
   }
 
   function handleCreateElement() {
     if (
-      !playerCowriesScore.includes("dust") &&
-      !playerCowriesScore.includes("binj")
+      !availableMoveNames.includes("dust") &&
+      !availableMoveNames.includes("binj")
     )
       return;
 
@@ -134,8 +137,8 @@ currentPlayerScore,
   }, [isShowCreationDialog]);
 
   useEffect(() => {
-    if (playerCowriesScore.length === 0) return;
-    const lastResult = playerCowriesScore[playerCowriesScore.length - 1];
+    if (availableMoveNames.length === 0) return;
+    const lastResult = availableMoveNames[availableMoveNames.length - 1];
 
     if (
       lastResult === "two" ||
@@ -146,14 +149,14 @@ currentPlayerScore,
       return;
     }
 
-    // const UPDATED_CURRENT_PLAYER_SCORE = calculateCurrentPlayerScore();
-    // setCurrentPlayerScore(UPDATED_CURRENT_PLAYER_SCORE);
-  }, [playerCowriesScore, gameState, calculateCurrentPlayerScore, setCurrentPlayerScore, setGameState]);
+    // const UPDATED_CURRENT_PLAYER_SCORE = calculateavailableMoves();
+    // setAvailableMoves(UPDATED_CURRENT_PLAYER_SCORE);
+  }, [availableMoveNames, gameState, calculateavailableMoves, setAvailableMoves, setGameState]);
 
   useEffect(() => {
     const CANT_CREATE =
-      !playerCowriesScore.includes("dust") &&
-      !playerCowriesScore.includes("binj");
+      !availableMoveNames.includes("dust") &&
+      !availableMoveNames.includes("binj");
     const PLAYER_ZERO_ACTIVE_ELEMENTS =
       playerTurn === "player1"
         ? player1ActiveElements === 0
@@ -161,10 +164,10 @@ currentPlayerScore,
     if (
       gameState === "playing" &&
       ((CANT_CREATE && PLAYER_ZERO_ACTIVE_ELEMENTS) ||
-        playerCowriesScore.length === 0)
+        availableMoveNames.length === 0)
     )
       setPlayerTurn((prev) => (prev === "player1" ? "player2" : "player1"));
-  }, [playerCowriesScore, gameState, setPlayerTurn]);
+  }, [availableMoveNames, gameState, setPlayerTurn]);
 
   return (
     <div className="w-75 rounded-2xl pb-5 bg-wood-500 flex items-center flex-col justify-center">
@@ -172,13 +175,13 @@ currentPlayerScore,
         Bergees Game
       </h2>
       <h1 className=" border-black-500 font-bold pt-2">{playerTurn} Turn</h1>
-      <h2 className="pt-4 font-bold">Total Cowries Value: {currentPlayerScore[0]+currentPlayerScore[1] || "0"} </h2>
-      <h2 className="pt-4 font-bold">Main Cowries Value: {currentPlayerScore[0] || "0"} </h2>
-      <h2 className="pt-4 font-bold">Rest Cowries Value: {currentPlayerScore[1] || "0"} </h2>
+      <h2 className="pt-4 font-bold">Total Cowries Value: {availableMoves[0] + availableMoves[1] || "0"} </h2>
+      <h2 className="pt-4 font-bold">Main Cowries Value: {availableMoves[0] || "0"} </h2>
+      <h2 className="pt-4 font-bold">Rest Cowries Value: {availableMoves[1] || "0"} </h2>
       <div className="pt-2 font-bold place-self-start pl-4 flex gap-1">
         Current Score:
         <div className="pr-4 font-normal flex flex-wrap gap-1">
-          {playerCowriesScore.map((s, index) => (
+          {availableMoveNames.map((s, index) => (
             <span key={index} className="bg-red-700 px-2 rounded-2xl">
               {s}
             </span>
@@ -225,7 +228,7 @@ function PlayerInfo({ player, playerActiveElements, playerWonPieces }) {
   const {
     playerTurn,
     setPlayerTurn,
-    playerCowriesScore,
+    availableMoveNames,
     gameState,
     setIsShowCreationDialog,
   } = useContext(BargeesGameContext);

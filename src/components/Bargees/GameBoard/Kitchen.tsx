@@ -5,8 +5,8 @@ import { BargeesGameContext } from "../../../contexts/BargeesGameContext"
 
 export default function Kitchen() {
     const { gameState,
-        playerCowriesScore,
-        setPlayerCowriesScore,
+        availableMoveNames,
+        setAvailableMoveNames,
         playerCowriesCarryScore,
         setPlayerCowriesCarryScore
     } = useContext(BargeesGameContext)
@@ -41,10 +41,10 @@ export default function Kitchen() {
         ];
 
         const currentCowriesValue_ = handleStonesResultName(FrontSideStones)[0];
-        setPlayerCowriesScore(currentCowriesValue_);
+        setAvailableMoveNames(currentCowriesValue_);
 
         const stonesCarryValue_ = handleStonesResultName(FrontSideStones)[0];
-        setPlayerCowriesScore(playerCowriesScore => playerCowriesScore + currentCowriesValue_);
+        setAvailableMoveNames(availableMoveNames => availableMoveNames + currentCowriesValue_);
         setPlayerCowriesCarryScore(playerCowriesCarryScore => playerCowriesCarryScore + stonesCarryValue_);
 
         const shuffled = stones.sort(() => Math.random() - 0.5);

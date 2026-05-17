@@ -39,15 +39,29 @@ export default function CreationDialog({ actionType = null }) {
       const UPDATED_PLAYER_COWRIES_SCORE = [...state];
       UPDATED_PLAYER_COWRIES_SCORE.splice(index, 1);
       stateUpdater(UPDATED_PLAYER_COWRIES_SCORE);
-    }
+    } else
+      console.log("Couldn't remove first item")
+  }
+
+  function updateSpecificIdx(val, state, stateUpdater)
+  {
+    const indexToUpdate = state.findIndex(el => el === -1);
+
+    if(indexToUpdate !== -1)
+    {
+      const NEW_ARR = [...state];
+      NEW_ARR.splice(indexToUpdate, 1, val);
+      stateUpdater(NEW_ARR);
+    } else console.log("Couldn't update idx");
   }
   
   function handleCreateAtMainHome() {
     handleCreateElement();
+
     if(playerTurn === "player1")
-      setPlayer1PiecesIndices(prev => prev.map(index => index === -1 ? PLAYER_1_HOME_1 : index));
+      updateSpecificIdx(PLAYER_1_HOME_1, player1PiecesIndices, setPlayer1PiecesIndices);
     else if(playerTurn === "player2")
-      setPlayer2PiecesIndices(prev => prev.map(index => index === -1 ? PLAYER_2_HOME_1 : index));
+      updateSpecificIdx(PLAYER_2_HOME_1, player2PiecesIndices, setPlayer2PiecesIndices );
     
     removeFirstItem("dust", playerCowriesScore, setPlayerCowriesScore);
     setIsShowCreationDialog(false);
@@ -56,9 +70,9 @@ export default function CreationDialog({ actionType = null }) {
   function handleCreateAtSecondaryHome() {
     handleCreateElement();
     if(playerTurn === "player1")
-    setPlayer1PiecesIndices(prev => prev.map(index => index === -1 ? PLAYER_1_HOME_2 : index));
+       updateSpecificIdx(PLAYER_1_HOME_2, player1PiecesIndices, setPlayer1PiecesIndices);
   else if(playerTurn === "player2")
-    setPlayer2PiecesIndices(prev => prev.map(index => index === -1 ? PLAYER_2_HOME_2 : index));
+     updateSpecificIdx(PLAYER_2_HOME_2, player1PiecesIndices, setPlayer1PiecesIndices);
   
   removeFirstItem("binj", playerCowriesScore, setPlayerCowriesScore);
   setIsShowCreationDialog(false);

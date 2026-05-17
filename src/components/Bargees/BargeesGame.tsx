@@ -4,6 +4,7 @@ import { BargeesGameContext } from '../../contexts/BargeesGameContext';
 import GameOptions from './GameOptions';
 import BargeesMainBoard from './GameBoard/BargeesMainBoard';
 import CreationDialog from './GameBoard/CreationDialog';
+import MessageDialog from './GameBoard/MessageDialog';
 
 export default function BargeesGame() {
     const GRID_SIZE = 19;
@@ -18,7 +19,7 @@ export default function BargeesGame() {
      //the sum of dust, binj...etc 
     // needed especially when you have binj and creation at home1 so the rest is 14  
 
-    const [playerCowriesScore, setPlayerCowriesScore] = useState([]); //dust, binj, shakeh, bara, two, three, four 
+    const [playerCowriesScore, setPlayerCowriesScore] = useState(["dust"]); //dust, binj, shakeh, bara, two, three, four 
 
     const [selectedPieceIndex, setSelectedPieceIndex] = useState(-1);
     const [player1WonPieces, setPlayer1WonPieces] = useState(0);
@@ -34,6 +35,8 @@ export default function BargeesGame() {
             //and each piece created added to the end of the array (in ordered way)
             //e.g. [-1,4,102,6] and [-1,-1,-1,5] are correct but [-1,3,5,-1] and [5, -1, -1, -1] aren't allowed
     const [player2PiecesIndices, setPlayer2PiecesIndices] = useState([-1,-1,-1,-1]);
+
+    const [message, setMessage] = useState("");
     
     // const [globalBoard, setGlobalBoard] = useState<string | null[]>(Array(24).fill(null));
 
@@ -70,7 +73,9 @@ export default function BargeesGame() {
                 player1PiecesIndices,
                 setPlayer1PiecesIndices,
                 player2PiecesIndices,
-                setPlayer2PiecesIndices
+                setPlayer2PiecesIndices,
+                message, 
+                setMessage
             }}
             >
 
@@ -87,6 +92,7 @@ export default function BargeesGame() {
                         <CreationDialog />
                     </>
                 }
+                {message && <MessageDialog />}
             </BargeesGameContext.Provider>
         </div>
     )

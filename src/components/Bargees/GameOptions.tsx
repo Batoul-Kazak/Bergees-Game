@@ -43,15 +43,15 @@ currentPlayerScore,
       playerCowriesScore.forEach(val => {
         const match = COWRIE_VALUES.find(obj => obj.cowriesName === val);
         if(match)
-        {
-          totalSum1 += match.actualValue[0];
-          totalSum2 += match.actualValue[1];
-        }
-      });
+          {
+            totalSum1 += match.actualValue[0];
+            totalSum2 += match.actualValue[1];
+          }
+        });
       return [totalSum1, totalSum2];
   }
 
-  function handleCowriesResult(frontSideStones) {
+  function handleCowriesStringResult(frontSideStones) {
     if (frontSideStones === 6) return "shakeh";
     else if (frontSideStones === 0) return "bara";
     else if (frontSideStones === 5) return "dust";
@@ -59,12 +59,37 @@ currentPlayerScore,
     else if (frontSideStones === 2) return "four";
     else if (frontSideStones === 3) return "three";
     else if (frontSideStones === 4) return "two";
+    else return "none"
   }
 
-  function handleMove() {
+   function handleCowriesNumericResult(frontSideStones) {
+    if (frontSideStones === 6) return [6, 0];
+    else if (frontSideStones === 0) return [12,0];
+    else if (frontSideStones === 5) return [10,1];
+    else if (frontSideStones === 1) return [24,1];
+    else if (frontSideStones === 2) return [4,0];
+    else if (frontSideStones === 3) return [3,0];
+    else if (frontSideStones === 4) return [2,0];
+    else return [0,0];
+  }
+
+  function toArray(...elements) 
+  {
+      const arr = [];
+      elements.forEach(el => {
+        arr.push(el);
+      })
+      return arr;
+  }
+
+  function handleShakeAndThrow() {
     if (gameState === "playing") return;
 
-    if (playerCowriesScore.length == 0) {
+    if (gameState === "idle") {
+      setGameState("shaking");
+      return;
+    }
+
       const frontSideCowries = Math.floor(Math.random() * 7);
       const backSideCowries = 6 - frontSideCowries;
 
@@ -79,35 +104,16 @@ currentPlayerScore,
       const shuffled = cowries.sort(() => Math.floor(Math.random() - 0.5));
       setCowriesGrid(shuffled);
 
-      const currentCowriesValue_ = handleCowriesResult(frontSideCowries);
+      const currentCowriesStrValue_ = handleCowriesStringResult(frontSideCowries); //stale state for that last item didn't get updated
       setPlayerCowriesScore((curValues) => [
         ...curValues,
-        currentCowriesValue_,
+        currentCowriesStrValue_,
       ]);
-    }
 
-    if (gameState === "idle") {
-      setGameState("shaking");
-      return;
-    }
-
-    const frontSideCowries = Math.floor(Math.random() * 7);
-    const backSideCowries = 6 - frontSideCowries;
-
-    const cowries = [
-      ...Array(frontSideCowries).fill("front"),
-      ...Array(backSideCowries).fill("back"),
-      null,
-      null,
-      null,
-    ];
-
-    const shuffled = cowries.sort(() => Math.floor(Math.random() - 0.5));
-    setCowriesGrid(shuffled);
-
-    const currentCowriesValue_ = handleCowriesResult(frontSideCowries);
-    setPlayerCowriesScore((curValues) => [...curValues, currentCowriesValue_]);
-    
+    const currentCowriesNumericValue_ = handleCowriesNumericResult(frontSideCowries); //this will be set as two numbers not array of 2 elements
+    // Maybe i have to convert currentCowriesNumericValue to array before assign it
+    console.log("...........")
+    setCurrentPlayerScore(prev => [...prev, currentCowriesNumericValue_]); 
   }
 
   function handleCreateElement() {
@@ -140,9 +146,9 @@ currentPlayerScore,
       return;
     }
 
-    const UPDATED_CURRENT_PLAYER_SCORE = calculateCurrentPlayerScore();
-    setCurrentPlayerScore(UPDATED_CURRENT_PLAYER_SCORE);
-  }, [playerCowriesScore, gameState]);
+    // const UPDATED_CURRENT_PLAYER_SCORE = calculateCurrentPlayerScore();
+    // setCurrentPlayerScore(UPDATED_CURRENT_PLAYER_SCORE);
+  }, [playerCowriesScore, gameState, calculateCurrentPlayerScore, setCurrentPlayerScore, setGameState]);
 
   useEffect(() => {
     const CANT_CREATE =
@@ -204,7 +210,7 @@ currentPlayerScore,
           Create Element
         </button>
         <button
-          onClick={handleMove}
+          onClick={handleShakeAndThrow}
           disabled={gameState === "playing"}
           className={`${gameState !== "playing" ? "bg-mint-700" : "bg-gray-700"} border-2 font-bold border-black-500 py-2 px-6 rounded-2xl`}
         >
@@ -220,7 +226,6 @@ function PlayerInfo({ player, playerActiveElements, playerWonPieces }) {
     playerTurn,
     setPlayerTurn,
     playerCowriesScore,
-    playerCowriesCarryScore,
     gameState,
     setIsShowCreationDialog,
   } = useContext(BargeesGameContext);

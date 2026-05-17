@@ -167,6 +167,7 @@ availableMoves,
         availableMoveNames.length === 0)
     )
       setPlayerTurn((prev) => (prev === "player1" ? "player2" : "player1"));
+      setGameState("idle");
   }, [availableMoveNames, gameState, setPlayerTurn]);
 
   return (

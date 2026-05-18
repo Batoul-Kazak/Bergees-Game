@@ -19,7 +19,7 @@ export default function BargeesGame() {
      //the sum of dust, binj...etc 
     // needed especially when you have binj and creation at home1 so the rest is 14  
 
-    const [availableMoveNames, setAvailableMoveNames] = useState(["dust"]); //dust, binj, shakeh, bara, two, three, four 
+    const [availableMoveNames, setAvailableMoveNames] = useState([]); //dust, binj, shakeh, bara, two, three, four 
 
     const [selectedPieceIndex, setSelectedPieceIndex] = useState(-1);
     const [player1WonPieces, setPlayer1WonPieces] = useState(0);

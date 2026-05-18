@@ -1,10 +1,9 @@
 TODO: 
 ***Main Features
-    -remove background for player1 and player2 images to be transparent
-    -complete fixing the logic for updating cowries scores correctly corresponding to UI
     -make sure the player2 has the exact functionalities for player1
     -show a number (in case many player pieces are setting on the same square)
     -player1 can kill player2 and vise versa
+    -add timer for each player to move in his turn (around 20 seconds) OR according to available moves he has
 
 ***Extra Features:
     1.make the website with Navbar and many settings 
@@ -17,3 +16,18 @@ TODO:
         -activate/don't activate safe mood (activates cells are no longer highlighted)
     2.help a page contains many images (screenshots from the same game) with text explains for each step/situation + maybe video
     3.about page creator/website
+
+    game states:
+        -idle: 
+            -button text: (${playerTurn} play)
+            -it is just a click TO CHANGE STATE => to "shaking"
+
+        -shaking:
+            -button text (shake and throw)
+            -player can create elements or shake (didn't get two || three || four)
+            -when he get two || three || four STATE CHANGES TO => playing 
+
+        -playing:
+            -button text (...)
+            -player got (two || three || four) but didn't move or create element
+            -player can create element or (if has enough score for that) IF NOT => set state to "idle" again

@@ -21,6 +21,7 @@ export default function CreationDialog({ actionType = null }) {
   } = useContext(BargeesGameContext);
 
   const CAN_CREATE_AT_SECONDARY_HOME = availableMoveNames.includes("binj");
+  const CAN_CREATE_AT_MAIN_HOME = availableMoveNames.includes("dust");
 
   function handleCreateElement() {
     if (playerTurn === "player1") {
@@ -40,7 +41,7 @@ export default function CreationDialog({ actionType = null }) {
       UPDATED_PLAYER_COWRIES_SCORE.splice(index, 1);
       stateUpdater(UPDATED_PLAYER_COWRIES_SCORE);
     } else
-      console.log("Couldn't remove first item")
+      return -1;
   }
 
   function updateSpecificIdx(val, state, stateUpdater)
@@ -56,6 +57,7 @@ export default function CreationDialog({ actionType = null }) {
   }
   
   function handleCreateAtMainHome() {
+
     handleCreateElement();
 
     if(playerTurn === "player1")
@@ -64,6 +66,7 @@ export default function CreationDialog({ actionType = null }) {
       updateSpecificIdx(PLAYER_2_HOME_1, player2PiecesIndices, setPlayer2PiecesIndices );
     
     removeFirstItem("dust", availableMoveNames, setAvailableMoveNames);
+    
     setIsShowCreationDialog(false);
   }
 
@@ -89,8 +92,9 @@ export default function CreationDialog({ actionType = null }) {
       <p className="text-xl">Where to create Piece?</p>
       <div className="flex flex-col gap-4 w-full">
         <button
+          disabled={!CAN_CREATE_AT_MAIN_HOME}
           onClick={handleCreateAtMainHome}
-          className="rounded-2xl border-2 border-wood-700 bg-wood-500 px-4 py-2 text-black-500 font-bold"
+          className={`rounded-2xl border-2 border-wood-700 ${CAN_CREATE_AT_MAIN_HOME ? "bg-wood-500" : "bg-gray-700"} px-4 py-2 text-black-500 font-bold`}
         >
           Create At Main Home
         </button>

@@ -17,8 +17,8 @@ export default function GameOptions() {
     setGameState,
     availableMoveNames,
     setAvailableMoveNames,
-     setAvailableMoves,
-availableMoves,
+    setAvailableMoves,
+    availableMoves,
     player1WonPieces,
     player2WonPieces,
     setCowriesGrid,
@@ -29,16 +29,19 @@ availableMoves,
     gameState === "idle"
       ? `${playerTurn} Start`
       : gameState === "shaking"
-        ? "Shake and Throw"
-        : gameState === "playing"
-          ? "Move or Create"
-          : ""; //or just play rather than Move or Create
-  const canCreateElement =
-    (gameState === "shaking" || gameState === "playing") &&
-    (availableMoveNames.includes("dust") ||
-      availableMoveNames.includes("binj"));
+        ? "Shake and Throw" : gameState === "playing" ? "..." : "";
 
-  function calculateavailableMoves()
+  const canCreateElement =
+    (gameState !== "idle") && (availableMoveNames.includes("dust") || availableMoveNames.includes("binj"));
+
+  const isFinalShake = (availableMoveNames[availableMoveNames.length - 1] === "two") || (availableMoveNames[availableMoveNames.length - 1] === "three") || (availableMoveNames[availableMoveNames.length - 1] === "four");
+
+  // function switchPlayerTurn()
+  // {
+      
+  // }
+
+  function calculateAvailableMoves()
   {
       let totalSum1 = 0;
       let totalSum2 = 0;
@@ -76,20 +79,22 @@ availableMoves,
       }
   
 
-  function toArray(...elements) 
-  {
-      const arr = [];
-      elements.forEach(el => {
-        arr.push(el);
-      })
-      return arr;
-  }
+  // function toArray(...elements) 
+  // {
+  //     const arr = [];
+  //     elements.forEach(el => {
+  //       arr.push(el);
+  //     })
+  //     return arr;
+  // }
+
+
 
   function handleShakeAndThrow() {
-    if (gameState === "playing") return;
+    if (gameState !== "shaking") return;
 
-    if (gameState === "idle") {
-      setGameState("shaking");
+    if(isFinalShake) 
+    {
       return;
     }
 
@@ -119,54 +124,63 @@ availableMoves,
     setAvailableMoves(prev => [...prev, currentCowriesNumericValue_]); 
   }
 
-  function handleCreateElement() {
-    if (
-      !availableMoveNames.includes("dust") &&
-      !availableMoveNames.includes("binj")
-    )
-      return;
+  function handleGameButtonClicked()
+  {
+    if(gameState === "idle")
+       startGame(); else handleShakeAndThrow();
+  }
 
-      if (playerTurn === "player1" && player1ActiveElements == 4) return;
-      else if (playerTurn === "player2" && player2ActiveElements == 4) return;
+  function handleCreateElement() {
+    if (!canCreateElement) return;
+
+    if ((playerTurn === "player1" && player1ActiveElements == 4) || (playerTurn === "player2" && player2ActiveElements == 4)) return;
 
     setIsShowCreationDialog(true);
   }
 
-  useEffect(() => {
-    if (isShowCreationDialog) console.log("shown");
-  }, [isShowCreationDialog]);
+  function startGame()
+  {
+    if(gameState === "idle") 
+      setGameState("shaking");
+  }
 
   useEffect(() => {
-    if (availableMoveNames.length === 0) return;
-    const lastResult = availableMoveNames[availableMoveNames.length - 1];
 
-    if (
-      lastResult === "two" ||
-      lastResult === "three" ||
-      lastResult === "four"
-    ) {
+    // if(isFinalShake)
+    // {
+      // setGameState("playing");
+    // }
+
+    const CAN_CREATE = availableMoveNames.includes("dust") || availableMoveNames.includes("binj");
+    const PLAYER_ZERO_ACTIVE_ELEMENTS = playerTurn === "player1" ? player1ActiveElements === 0 : player2ActiveElements === 0;
+
+    const noElements_cantCreate = isFinalShake && PLAYER_ZERO_ACTIVE_ELEMENTS && !CAN_CREATE;
+    const noAvailableMoves = isFinalShake && (availableMoveNames.length === 0);
+
+    console.log("game-state: ", noAvailableMoves);
+    
+    const playerActivePieces = playerTurn === "player1" ? "player2" : "player1";
+    if((playerActivePieces > 0 && availableMoves.length !== 0) || canCreateElement)
+    {
       setGameState("playing");
-      return;
-    }
-
-    // const UPDATED_CURRENT_PLAYER_SCORE = calculateavailableMoves();
-    // setAvailableMoves(UPDATED_CURRENT_PLAYER_SCORE);
-  }, [availableMoveNames, gameState, calculateavailableMoves, setAvailableMoves, setGameState]);
-
-  useEffect(() => {
-    const CANT_CREATE =
-      !availableMoveNames.includes("dust") &&
-      !availableMoveNames.includes("binj");
-    const PLAYER_ZERO_ACTIVE_ELEMENTS =
-      playerTurn === "player1"
-        ? player1ActiveElements === 0
-        : player2ActiveElements === 0;
-    if (
-      gameState === "playing" &&
-      ((CANT_CREATE && PLAYER_ZERO_ACTIVE_ELEMENTS) ||
-        availableMoveNames.length === 0)
-    )
+    } else if (noElements_cantCreate && (isFinalShake || availableMoveNames.length === 0)) {
+      console.log("second")
+      setGameState("idle");
       setPlayerTurn((prev) => (prev === "player1" ? "player2" : "player1"));
+      setAvailableMoveNames([]);
+      setAvailableMoves([]);
+    } else if(noAvailableMoves)
+      {
+        setPlayerTurn((prev) => (prev === "player1" ? "player2" : "player1"));
+        setGameState("idle");
+        setAvailableMoveNames([]);
+        setAvailableMoves([]);
+      } 
+
+    
+
+      // process the senario when player has enough score and element but can't move it because he can't move on winCells but he needs only 1 step so he can move
+
       // setGameState("idle");
   }, [availableMoveNames, gameState, setPlayerTurn]);
 
@@ -214,12 +228,13 @@ availableMoves,
           Create Element
         </button>
         <button
-          onClick={handleShakeAndThrow}
+          onClick={handleGameButtonClicked}
           disabled={gameState === "playing"}
           className={`${gameState !== "playing" ? "bg-mint-700" : "bg-gray-700"} border-2 font-bold border-black-500 py-2 px-6 rounded-2xl`}
         >
           {optionButtonText}
         </button>
+        
       </div>
     </div>
   );

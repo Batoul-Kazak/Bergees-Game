@@ -83,7 +83,7 @@ export default function BargeesMainBoard() {
       PLAYER_2_REST_CELLS.includes(index)
     )
       baseStyle = "bg-red-900 rounded-[4px]";
-    else baseStyle = "bg-linear-90 from-wood-200 to-wood-700 rounded-[4px]";
+    else baseStyle = "bg-linear-90 from-gray-500 to-gray-800 rounded-[4px]"; //from-wood-200 to-wood-700
 
     const isAvailable = availableCells.flat().includes(index);
     if (isAvailable)

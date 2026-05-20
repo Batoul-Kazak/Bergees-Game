@@ -234,7 +234,6 @@ export default function GameOptions() {
         >
           {optionButtonText}
         </button>
-        
       </div>
     </div>
   );

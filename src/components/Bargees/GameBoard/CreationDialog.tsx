@@ -56,6 +56,7 @@ export default function CreationDialog({ actionType = null }) {
     } else console.log("Couldn't update idx");
   }
   
+
   function handleCreateAtMainHome() {
 
     handleCreateElement();
@@ -66,7 +67,6 @@ export default function CreationDialog({ actionType = null }) {
       updateSpecificIdx(PLAYER_2_HOME_1, player2PiecesIndices, setPlayer2PiecesIndices );
     
     removeFirstItem("dust", availableMoveNames, setAvailableMoveNames);
-    
     setIsShowCreationDialog(false);
   }
 
@@ -75,7 +75,7 @@ export default function CreationDialog({ actionType = null }) {
     if(playerTurn === "player1")
        updateSpecificIdx(PLAYER_1_HOME_2, player1PiecesIndices, setPlayer1PiecesIndices);
   else if(playerTurn === "player2")
-     updateSpecificIdx(PLAYER_2_HOME_2, player1PiecesIndices, setPlayer1PiecesIndices);
+     updateSpecificIdx(PLAYER_2_HOME_2, player2PiecesIndices, setPlayer2PiecesIndices);
   
   removeFirstItem("binj", availableMoveNames, setAvailableMoveNames);
   setIsShowCreationDialog(false);

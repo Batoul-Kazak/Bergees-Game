@@ -238,26 +238,6 @@ export default function BargeesMainBoard() {
 
     if (usedScoreIndex === -1) return;
 
-      // const usedScoreItem = availableMoves[usedScoreIndex];
-
-      // setAvailableMoves((prevScores) => {
-      //   const newScores = [...prevScores];
-      //   newScores.splice(usedScoreIndex, 1);
-      //   return newScores;
-      // });
-
-      // if (usedScoreItem) {
-      //   const COWRIE_OBJ = COWRIE_VALUES.find(
-      //     (item) =>
-      //       item.actualValue[0] === usedScoreItem[0] &&
-      //       item.actualValue[1] === usedScoreItem[1],
-      //   );
-
-      //   if (COWRIE_OBJ) {
-      //     setAvailableMoveNames((prev) => [...prev, COWRIE_OBJ.cowriesName]);
-      //   }
-      // }
-
       setAvailableMoves((prev) => {
         const newMoves = [...prev];
         newMoves.splice(usedScoreIndex, 1);

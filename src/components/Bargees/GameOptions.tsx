@@ -120,7 +120,6 @@ export default function GameOptions() {
 
     const currentCowriesNumericValue_ = getCowriesNumericResult(frontSideCowries); //this will be set as two numbers not array of 2 elements
     // Maybe i have to convert currentCowriesNumericValue to array before assign it
-    console.log("...........")
     setAvailableMoves(prev => [...prev, currentCowriesNumericValue_]); 
   }
 

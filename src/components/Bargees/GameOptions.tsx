@@ -1,9 +1,8 @@
 import { useContext, useEffect } from "react";
 import { BargeesGameContext } from "../../contexts/BargeesGameContext";
-
-import { COWRIE_VALUES } from "../../constants/CowrieValues";
 // import { getCowriesNumericResult } from "../../utils/getCowriesNumericResult";
 // import { getCowriesStringResult } from "../../utils/getCowriesNumericResult";
+import { getAvailableMoveNames } from "../../utils/getAvailableMoveNames";
 
 export default function GameOptions() {
   const {
@@ -15,8 +14,6 @@ export default function GameOptions() {
     setPlayerTurn,
     gameState,
     setGameState,
-    availableMoveNames,
-    setAvailableMoveNames,
     setAvailableMoves,
     availableMoves,
     player1WonPieces,
@@ -25,163 +22,109 @@ export default function GameOptions() {
     setIsShowCreationDialog,
     isShowCreationDialog,
   } = useContext(BargeesGameContext);
+
   const optionButtonText =
     gameState === "idle"
-      ? `${playerTurn} Start`
+      ? `${playerTurn} play`
       : gameState === "shaking"
-        ? "Shake and Throw" : gameState === "playing" ? "..." : "";
+        ? "Shake and Throw"
+        : gameState === "turnEnds" //the turn of shaking for the current player
+          ? "..."
+          : "unknown";
 
-  const canCreateElement =
-    (gameState !== "idle") && (availableMoveNames.includes("dust") || availableMoveNames.includes("binj"));
+  const TOTAL_COWRIES_VALUE =
+    availableMoves.length > 0
+      ? availableMoves.reduce((acc, move) => acc + move[0] + move[1], 0)
+      : 0;
+  const MAIN_COWRIES_VALUE =
+    availableMoves.length > 0
+      ? availableMoves.reduce((acc, move) => acc + move[0], 0)
+      : 0;
+  const REST_COWRIES_VALUE =
+    availableMoves.length > 0
+      ? availableMoves.reduce((acc, move) => acc + move[1], 0)
+      : 0;
+  const CAN_CREATE_ELEMENT =
+    getAvailableMoveNames(availableMoves).includes("dust") ||
+    getAvailableMoveNames(availableMoves).includes("binj");
 
-  const isFinalShake = (availableMoveNames[availableMoveNames.length - 1] === "two") || (availableMoveNames[availableMoveNames.length - 1] === "three") || (availableMoveNames[availableMoveNames.length - 1] === "four");
-
-  // function switchPlayerTurn()
-  // {
-      
-  // }
-
-  function calculateAvailableMoves()
-  {
-      let totalSum1 = 0;
-      let totalSum2 = 0;
-      availableMoveNames.forEach(val => {
-        const match = COWRIE_VALUES.find(obj => obj.cowriesName === val);
-        if(match)
-          {
-            totalSum1 += match.actualValue[0];
-            totalSum2 += match.actualValue[1];
-          }
-        });
-      return [totalSum1, totalSum2];
-  }
-
-    function getCowriesStringResult(frontSideStones) {
-      if (frontSideStones === 6) return "shakeh";
-      else if (frontSideStones === 0) return "bara";
-      else if (frontSideStones === 5) return "dust";
-      else if (frontSideStones === 1) return "binj";
-      else if (frontSideStones === 2) return "four";
-      else if (frontSideStones === 3) return "three";
-      else if (frontSideStones === 4) return "two";
-      else return "none"
-    }
-
-     function getCowriesNumericResult(frontSideStones) {
-        if (frontSideStones === 6) return [6, 0];
-        else if (frontSideStones === 0) return [12,0];
-        else if (frontSideStones === 5) return [10,1];
-        else if (frontSideStones === 1) return [24,1];
-        else if (frontSideStones === 2) return [4,0];
-        else if (frontSideStones === 3) return [3,0];
-        else if (frontSideStones === 4) return [2,0];
-        else return [0,0];
-      }
-  
-
-  // function toArray(...elements) 
-  // {
-  //     const arr = [];
-  //     elements.forEach(el => {
-  //       arr.push(el);
-  //     })
-  //     return arr;
-  // }
-
-
-
-  function handleShakeAndThrow() {
-    if (gameState !== "shaking") return;
-
-    if(isFinalShake) 
-    {
+  function handleStartGame() {
+    if (gameState !== "idle") {
       return;
     }
 
-      const frontSideCowries = Math.floor(Math.random() * 7);
-      const backSideCowries = 6 - frontSideCowries;
-
-      const cowries = [
-        ...Array(frontSideCowries).fill("front"),
-        ...Array(backSideCowries).fill("back"),
-        null,
-        null,
-        null,
-      ];
-
-      const shuffled = cowries.sort(() => Math.floor(Math.random() - 0.5));
-      setCowriesGrid(shuffled);
-
-      const currentCowriesStrValue_ = getCowriesStringResult(frontSideCowries); //stale state for that last item didn't get updated
-      setAvailableMoveNames((curValues) => [
-        ...curValues,
-        currentCowriesStrValue_,
-      ]);
-
-    const currentCowriesNumericValue_ = getCowriesNumericResult(frontSideCowries); //this will be set as two numbers not array of 2 elements
-    // Maybe i have to convert currentCowriesNumericValue to array before assign it
-    setAvailableMoves(prev => [...prev, currentCowriesNumericValue_]); 
+    setGameState("shaking");
   }
 
-  function handleGameButtonClicked()
-  {
-    if(gameState === "idle")
-       startGame(); else handleShakeAndThrow();
+  function getCowriesResult(frontSideCowriesCount) {
+    switch (frontSideCowriesCount) {
+      case 0:
+        return [12, 0];
+      case 1:
+        return [24, 1];
+      case 2:
+        return [4, 0];
+      case 3:
+        return [3, 0];
+      case 4:
+        return [2, 0];
+      case 5:
+        return [10, 1];
+      case 6:
+        return [6, 0];
+    }
+  }
+  function handleShakingAndThrow() {
+    const frontSideCowriesCount = Math.floor(Math.random() * 7);
+
+    const cowries = [
+      ...Array(frontSideCowriesCount).fill("front"),
+      ...Array(6 - frontSideCowriesCount).fill("back"),
+      null,
+      null,
+      null,
+    ];
+
+    const shuffledCowries = cowries.sort(() => Math.random() - 0.5);
+    setCowriesGrid(shuffledCowries);
+
+    const newValue = getCowriesResult(frontSideCowriesCount);
+    setAvailableMoves((prev) => [...prev, newValue]);
+
+    const isLastShake = frontSideCowriesCount >= 2 && frontSideCowriesCount <= 4;
+    if (isLastShake) {
+      setGameState("turnEnds");
+    }
+
+    const PLAYER_ACTIVE_ELEMENTS = playerTurn === "player1" ? player1ActiveElements : player2ActiveElements;
+    if(isLastShake && !CAN_CREATE_ELEMENT && PLAYER_ACTIVE_ELEMENTS === 0)
+    {
+        setGameState("idle");
+        setPlayerTurn((prev) => (prev === "player1" ? "player2" : "player1"));
+        setAvailableMoves([]);
+        console.log("gameState: ", gameState, " playerTurn: ", playerTurn)
+    }
+  }
+
+  function handleGameButtonClicked() {
+    if (gameState === "idle") {
+      handleStartGame();
+      return;
+    }
+
+    handleShakingAndThrow();
   }
 
   function handleCreateElement() {
-    if (!canCreateElement) return;
-
-    if ((playerTurn === "player1" && player1ActiveElements == 4) || (playerTurn === "player2" && player2ActiveElements == 4)) return;
+    if (!CAN_CREATE_ELEMENT) return;
+    if (
+      (playerTurn === "player1" && player1ActiveElements === 4) ||
+      (playerTurn === "player2" && player2ActiveElements === 4)
+    )
+      return;
 
     setIsShowCreationDialog(true);
   }
-
-  function startGame()
-  {
-    if(gameState === "idle") 
-      setGameState("shaking");
-  }
-
-  useEffect(() => {
-
-    // if(isFinalShake)
-    // {
-      // setGameState("playing");
-    // }
-
-    const CAN_CREATE = availableMoveNames.includes("dust") || availableMoveNames.includes("binj");
-    const PLAYER_ZERO_ACTIVE_ELEMENTS = playerTurn === "player1" ? player1ActiveElements === 0 : player2ActiveElements === 0;
-
-    const noElements_cantCreate = isFinalShake && PLAYER_ZERO_ACTIVE_ELEMENTS && !CAN_CREATE;
-    const noAvailableMoves = isFinalShake && (availableMoveNames.length === 0);
-
-    console.log("game-state: ", noAvailableMoves);
-    
-    const playerActivePieces = playerTurn === "player1" ? "player2" : "player1";
-    if((playerActivePieces > 0 && availableMoves.length !== 0) || canCreateElement)
-    {
-      setGameState("playing");
-    } else if (noElements_cantCreate && (isFinalShake || availableMoveNames.length === 0)) {
-      console.log("second")
-      setGameState("idle");
-      setPlayerTurn((prev) => (prev === "player1" ? "player2" : "player1"));
-      setAvailableMoveNames([]);
-      setAvailableMoves([]);
-    } else if(noAvailableMoves)
-      {
-        setPlayerTurn((prev) => (prev === "player1" ? "player2" : "player1"));
-        setGameState("idle");
-        setAvailableMoveNames([]);
-        setAvailableMoves([]);
-      } 
-
-    
-
-      // process the senario when player has enough score and element but can't move it because he can't move on winCells but he needs only 1 step so he can move
-
-      // setGameState("idle");
-  }, [availableMoveNames, gameState, setPlayerTurn]);
 
   return (
     <div className="w-75 rounded-2xl pb-5 bg-wood-500 flex items-center flex-col justify-center">
@@ -189,15 +132,21 @@ export default function GameOptions() {
         Bergees Game
       </h2>
       <h1 className=" border-black-500 font-bold pt-2">{playerTurn} Turn</h1>
-      <h2 className="pt-4 font-bold">Total Cowries Value: {availableMoves[0] + availableMoves[1] || "0"} </h2>
-      <h2 className="pt-4 font-bold">Main Cowries Value: {availableMoves[0] || "0"} </h2>
-      <h2 className="pt-4 font-bold">Rest Cowries Value: {availableMoves[1] || "0"} </h2>
+      <h2 className="pt-4 font-bold">
+        Total Cowries Value: {TOTAL_COWRIES_VALUE}{" "}
+      </h2>
+      <h2 className="pt-4 font-bold">
+        Main Cowries Value: {MAIN_COWRIES_VALUE}{" "}
+      </h2>
+      <h2 className="pt-4 font-bold">
+        Rest Cowries Value: {REST_COWRIES_VALUE}{" "}
+      </h2>
       <div className="pt-2 font-bold place-self-start pl-4 flex gap-1">
         Current Score:
         <div className="pr-4 font-normal flex flex-wrap gap-1">
-          {availableMoveNames.map((s, index) => (
+          {getAvailableMoveNames(availableMoves).map((value, index) => (
             <span key={index} className="bg-red-700 px-2 rounded-2xl">
-              {s}
+              {value}
             </span>
           ))}
         </div>
@@ -221,14 +170,14 @@ export default function GameOptions() {
       <div className="flex flex-col gap-2 font-bold">
         <button
           onClick={handleCreateElement}
-          disabled={!canCreateElement}
-          className={`${canCreateElement ? "bg-yellow-700" : "bg-gray-700"} border-black-500 p-2 border-2 rounded-xl mt-2`}
+          disabled={!CAN_CREATE_ELEMENT}
+          className={`${CAN_CREATE_ELEMENT ? "bg-yellow-700" : "bg-gray-700"} border-black-500 p-2 border-2 rounded-xl mt-2`}
         >
           Create Element
         </button>
         <button
           onClick={handleGameButtonClicked}
-          disabled={gameState === "playing"}
+          disabled={gameState === "turnEnds"}
           className={`${gameState !== "playing" ? "bg-mint-700" : "bg-gray-700"} border-2 font-bold border-black-500 py-2 px-6 rounded-2xl`}
         >
           {optionButtonText}
@@ -242,7 +191,7 @@ function PlayerInfo({ player, playerActiveElements, playerWonPieces }) {
   const {
     playerTurn,
     setPlayerTurn,
-    availableMoveNames,
+    availableMoves,
     gameState,
     setIsShowCreationDialog,
   } = useContext(BargeesGameContext);

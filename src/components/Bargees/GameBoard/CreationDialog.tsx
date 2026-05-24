@@ -4,6 +4,7 @@ import { PLAYER_1_HOME_1 } from "../../../constants/boardHomes";
 import { PLAYER_1_HOME_2 } from "../../../constants/boardHomes";
 import { PLAYER_2_HOME_1 } from "../../../constants/boardHomes";
 import { PLAYER_2_HOME_2 } from "../../../constants/boardHomes";
+import { getAvailableMoveNames } from "../../../utils/getAvailableMoveNames";
 
 export default function CreationDialog({ actionType = null }) {
   const {
@@ -16,12 +17,12 @@ export default function CreationDialog({ actionType = null }) {
     player2PiecesIndices,
     setPlayer1PiecesIndices,
     setPlayer2PiecesIndices,
-    availableMoveNames,
-    setAvailableMoveNames
+    availableMoves,
+    setAvailableMoves
   } = useContext(BargeesGameContext);
 
-  const CAN_CREATE_AT_SECONDARY_HOME = availableMoveNames.includes("binj");
-  const CAN_CREATE_AT_MAIN_HOME = availableMoveNames.includes("dust");
+  const CAN_CREATE_AT_SECONDARY_HOME = getAvailableMoveNames(availableMoves).includes("binj");
+  const CAN_CREATE_AT_MAIN_HOME = getAvailableMoveNames(availableMoves).includes("dust");
 
   function handleCreateElement() {
     if (playerTurn === "player1") {
@@ -31,17 +32,36 @@ export default function CreationDialog({ actionType = null }) {
     }
   }
 
-  function removeFirstItem(item, state, stateUpdater)
+  // function removeFirstItem(item, state, stateUpdater)
+  // {
+    // 
+    // const index =  state.findIndex(i => i === item);
+// 
+    // if(index !== -1)
+    // {
+      // const UPDATED_PLAYER_COWRIES_SCORE = [...state];
+      // UPDATED_PLAYER_COWRIES_SCORE.splice(index, 1);
+      // stateUpdater(UPDATED_PLAYER_COWRIES_SCORE);
+    // } else
+      // return -1;
+  // }
+
+  function removeScore(item, state, stateUpdater)
   {
-    const index =  state.findIndex(i => i === item);
+    let index = -1;
+    if(item === "dust")
+    {
+      index = state.findIndex(item_ => item_[0] == 10);
+    } else {
+      index = state.findIndex(item_ => item_[0] == 24);
+    }
 
     if(index !== -1)
     {
       const UPDATED_PLAYER_COWRIES_SCORE = [...state];
       UPDATED_PLAYER_COWRIES_SCORE.splice(index, 1);
       stateUpdater(UPDATED_PLAYER_COWRIES_SCORE);
-    } else
-      return -1;
+    } else return -1;
   }
 
   function updateSpecificIdx(val, state, stateUpdater)
@@ -66,7 +86,7 @@ export default function CreationDialog({ actionType = null }) {
     else if(playerTurn === "player2")
       updateSpecificIdx(PLAYER_2_HOME_1, player2PiecesIndices, setPlayer2PiecesIndices );
     
-    removeFirstItem("dust", availableMoveNames, setAvailableMoveNames);
+    removeScore("dust", availableMoves, setAvailableMoves);
     setIsShowCreationDialog(false);
   }
 
@@ -77,7 +97,7 @@ export default function CreationDialog({ actionType = null }) {
   else if(playerTurn === "player2")
      updateSpecificIdx(PLAYER_2_HOME_2, player2PiecesIndices, setPlayer2PiecesIndices);
   
-  removeFirstItem("binj", availableMoveNames, setAvailableMoveNames);
+  removeScore("binj", availableMoves, setAvailableMoves);
   setIsShowCreationDialog(false);
   }
 

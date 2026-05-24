@@ -26,6 +26,7 @@ import { COWRIE_VALUES } from "../../../constants/CowrieValues";
 // import { usePieceMove } from "../../../hooks/usePieceMove";
 // import { useSelectedPiece } from "../../../hooks/useSelectedPiece";
 import { convertCowriesType } from "../../../utils/convertCowriesType";
+import { getAvailableMoveNames } from '../../../utils/getAvailableMoveNames';
 export default function BargeesMainBoard() {
   const GRID_SIZE = 19;
   const {
@@ -38,9 +39,11 @@ export default function BargeesMainBoard() {
     availableMoves,
     selectedPieceIndex,
     playerTurn,
-    availableMoveNames,
-    setAvailableMoveNames,
     setAvailableMoves,
+    gameState,
+    setGameState,
+    setPlayerTurn,
+    setSelectedPieceIndex
   } = useContext(BargeesGameContext);
   // const [idx, setIdx] = useState(0);
   // const {getAvailableSquares} = usePieceMove();
@@ -51,6 +54,10 @@ export default function BargeesMainBoard() {
     lastAvailableStoneClickedPosition,
     setLastAvailableStoneClickedPosition,
   ] = useState(-1);
+
+    const CAN_CREATE_ELEMENT =
+    getAvailableMoveNames(availableMoves).includes("dust") ||
+    getAvailableMoveNames(availableMoves).includes("binj");
 
   function preventedCell(index) {
     const row = Math.floor(index / GRID_SIZE);
@@ -67,7 +74,7 @@ export default function BargeesMainBoard() {
 
   // note: Download the tailwind function to merge classes
   function StoneColor(index) {
-    let baseStyle = "";
+    let baseStyle;
 
     if (preventedCell(index)) return "bg-black border-black";
     else if (PLAYER_1_HOME_1 === index || PLAYER_1_HOME_2 === index)
@@ -83,11 +90,15 @@ export default function BargeesMainBoard() {
       PLAYER_2_REST_CELLS.includes(index)
     )
       baseStyle = "bg-red-900 rounded-[4px]";
-    else baseStyle = "bg-linear-90 from-gray-500 to-gray-800 rounded-[4px]"; //from-wood-200 to-wood-700
+    else baseStyle = "bg-linear-90 from-wood-200/70 to-wood-700/60 rounded-[4px]"; //from-wood-200 to-wood-700
 
     const isAvailable = availableCells.flat().includes(index);
+
+    const selectedPiecePos = getSelectedPieceCellPosition();
+    const selectedStyle = (index === selectedPiecePos && selectedPieceIndex !== -1) ? "ring-4 ring-blue-400" : "";
+
     if (isAvailable)
-      return `${baseStyle} ring-4 ring-green-400 z-10 bg-green-500 `;
+      return `${baseStyle} ring-4 ring-green-400 z-10 bg-green-500 ${selectedStyle}`;
 
     return baseStyle;
   }
@@ -244,11 +255,15 @@ export default function BargeesMainBoard() {
         return newMoves;
       });
 
-      setAvailableMoveNames((prev) => {
-        const newMoveNames = [...prev];
-        newMoveNames.splice(usedScoreIndex, 1);
-        return newMoveNames; 
-      });
+    // turn of shaking for the player
+    if(gameState === "turnEnds" && availableMoves.length === 1)
+    {
+      setGameState("idle");
+      setPlayerTurn((prev) => (prev === "player1" ? "player2" : "player1"));
+      setAvailableMoves([]);
+      console.log("gameState: ", gameState, " playerTurn: ", playerTurn)
+      setSelectedPieceIndex(-1);
+    }
   }
 
   //   useEffect(() => {

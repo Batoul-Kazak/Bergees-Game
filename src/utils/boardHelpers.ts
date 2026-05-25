@@ -65,12 +65,12 @@ export function getAvailableSquares(
     const TARGET_CELL_POSITION_1 = getTargetOnPath(
       playerTurn,
       START_INDEX,
-      score[0]
+      score[0] //for the main value (in case it is dust/binj)
     );
     const TARGET_CELL_POSITION_2 = getTargetOnPath(
       playerTurn,
       START_INDEX,
-      score[1]
+      score[1] //for the rest value (in case it is dust/binj)
     );
 
     const isEqual = TARGET_CELL_POSITION_1 === TARGET_CELL_POSITION_2;

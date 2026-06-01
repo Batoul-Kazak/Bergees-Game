@@ -88,15 +88,14 @@ export default function BargeesMainBoard() {
     return baseStyle;
   }
 
-  function handleStoneClicked(targetCellIdx) {
-    // if(gameState !== "playing") return;
-
+  function handleStoneClicked(targetCellIdx, selectedPieceIndex) {
     //Prevent player from walking on unAllowed stones for him
+    console.log("clicked......");
     if (preventedCell(targetCellIdx)) return;
-
+    
     let ALLOWED_TO_MOVE = true;
     // if (preventedCell(targetCellIdx)) ALLOWED_TO_MOVE = false;
-
+    
     ALLOWED_TO_MOVE = CheckIfCanMove(
       FORBIDDEN_CELLS,
       ALLOWED_TO_MOVE,
@@ -104,39 +103,37 @@ export default function BargeesMainBoard() {
     );
     if (playerTurn === "player1")
       ALLOWED_TO_MOVE = CheckIfCanMove(
-        PLAYER_1_FORBIDDEN_CELLS,
-        ALLOWED_TO_MOVE,
-        targetCellIdx,
-      );
-    else if (playerTurn === "player2")
-      ALLOWED_TO_MOVE = CheckIfCanMove(
-        PLAYER_2_FORBIDDEN_CELLS,
-        ALLOWED_TO_MOVE,
-        targetCellIdx,
-      );
-
+    PLAYER_1_FORBIDDEN_CELLS,
+    ALLOWED_TO_MOVE,
+    targetCellIdx,
+  );
+  else if (playerTurn === "player2")
+        ALLOWED_TO_MOVE = CheckIfCanMove(
+      PLAYER_2_FORBIDDEN_CELLS,
+      ALLOWED_TO_MOVE,
+      targetCellIdx,
+    );
+    
     //Prevent player from walking if doesn't have enough score
     if (availableMoves.length === 0) return;
-
+    
     const SELECTED_PIECE_POSITION = getSelectedPieceCellPosition(
       selectedPieceIndex,
       playerTurn,
       player1PiecesIndices,
       player2PiecesIndices,
     );
-
-    console.log("selected piece position: ", SELECTED_PIECE_POSITION);
-
+    
     if (SELECTED_PIECE_POSITION === -1 || SELECTED_PIECE_POSITION === null)
       return;
-
+    
     const currentPath =
       playerTurn === "player1" ? PATH_1_INDICES : PATH_2_INDICES;
 
-    const startIndex = currentPath.indexOf(SELECTED_PIECE_POSITION);
+    const startIndex = currentPath.indexOf(SELECTED_PIECE_POSITION); //256 
     const endIndex = currentPath.indexOf(targetCellIdx);
 
-    //preventing player on moving but only if cell is in his path
+    //preventing player from moving but only if the cell is in his path
     if (startIndex === -1 || endIndex === -1) return;
 
     const MOVES = getAvailableSquares(
@@ -171,12 +168,15 @@ export default function BargeesMainBoard() {
         ? setPlayer1PiecesIndices
         : setPlayer2PiecesIndices;
 
-    //update one piece position in playerPiecesIndices array state
+    //move (update current selected player position)
     setPieces((prev) => {
       const newArr = [...prev];
       newArr[selectedPieceIdx] = targetCellIdx;
       return newArr;
     });
+
+    const setOpponentPositions = playerTurn === "player1" ? setPlayer2PiecesIndices : setPlayer1PiecesIndices;
+    setOpponentPositions((prev) => prev.filter(pos => pos !== targetCellIdx));
 
     const usedScoreIndex = availableMoves.findIndex((scoreItem) => {
       const calculatedPos = getTargetOnPath(
@@ -195,30 +195,6 @@ export default function BargeesMainBoard() {
       return newMoves;
     });
 
-    const killer = playerTurn;
-    const opponent = playerTurn === "player1" ? "player2" : "player1";
-
-    const opponentPositions =
-      playerTurn === "player1" ? player1PiecesIndices : player2PiecesIndices;
-
-    MOVES.forEach((pos) => {
-      const isOpponentPositionsIncludesPos = opponentPositions.forEach(
-        (item) => {
-          console.log("item: ", item, "position: ", pos);
-          return item === pos;
-        },
-      );
-      if (isOpponentPositionsIncludesPos) {
-        setKillingCells((prev) => [...prev, pos]);
-        console.log("BBB: ", pos);
-      }
-    });
-
-    // const killer = playerTurn;
-    // const opponent = playerTurn === "player1" ? "player2" : "player1";
-
-    // const
-
     // turn of shaking for the player
     if (gameState === "turnEnds" && availableMoves.length === 1) {
       setGameState("idle");
@@ -231,25 +207,17 @@ export default function BargeesMainBoard() {
 
   useEffect(() => {
     if (selectedPieceIndex !== -1 && selectedPieceIndex !== null) {
-      const moves = getAvailableSquares(
-        selectedPieceIndex,
-        playerTurn,
-        player1PiecesIndices,
-        player2PiecesIndices,
-        availableMoves,
-      );
+      const moves = getAvailableSquares(selectedPieceIndex, playerTurn, player1PiecesIndices, player2PiecesIndices, availableMoves);
       setAvailableCells(moves);
+
+      const opponentPositions = playerTurn === "player1" ? player2PiecesIndices : player1PiecesIndices;
+      const kills = moves.flat().filter(pos => opponentPositions.includes(pos));
+      setKillingCells(kills);
     } else {
       setAvailableCells([]);
+      setKillingCells([]);
     }
-    console.log(selectedPieceIndex);
-  }, [
-    selectedPieceIndex,
-    availableMoves,
-    playerTurn,
-    player1PiecesIndices,
-    player2PiecesIndices,
-  ]);
+  }, [selectedPieceIndex, availableMoves, playerTurn, player1PiecesIndices, player2PiecesIndices]);
 
   return (
     <div
@@ -273,7 +241,7 @@ export default function BargeesMainBoard() {
             key={index}
             className={`border-[0.5px] inset-0 relative cursor-pointer 
                         flex justify-center items-center ${StoneColor(index)} font-bold text-red-950 text-[12px] w-9 h-9`}
-            onClick={() => handleStoneClicked(index)}
+            onClick={() => handleStoneClicked(index, selectedPieceIndex)}
           >
             {!isHidden && !WIN_CELLS.includes(index) && index}
             {stoneType && <Cowrie type={stoneType} />}
@@ -286,6 +254,8 @@ export default function BargeesMainBoard() {
                     key={`p1-${pieceIdx}`}
                     player="player1"
                     id={pieceIdx}
+                    handleStoneClicked={() => handleStoneClicked(index ,selectedPieceIndex)}
+                    cellIdx={index}
                   />
                 ) : null,
               )}
@@ -299,6 +269,8 @@ export default function BargeesMainBoard() {
                     key={`p2-${pieceIdx}`}
                     player="player2"
                     id={pieceIdx}
+                    handleStoneClicked={() => handleStoneClicked(index ,selectedPieceIndex)}
+                    cellIdx={index}
                   />
                 ) : null,
               )}

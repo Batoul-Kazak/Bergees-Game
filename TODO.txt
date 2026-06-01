@@ -31,3 +31,5 @@ TODO:
             -button text (...)
             -player got (two || three || four) but didn't move or create element
             -player can create element or (if has enough score for that) IF NOT => set state to "idle" again
+
+

@@ -6,7 +6,7 @@ import { BargeesGameContext } from '../../../contexts/BargeesGameContext';
 import player1Img from "./../../../../public/images/solider.png";
 import player2Img from "./../../../../public/images/horse.png";
 
-export default function Player({ player, id }) {
+export default function Player({ player, id, handleStoneClicked, cellIdx }) {
     const { selectedPieceIndex,
         setSelectedPieceIndex,
         playerTurn,
@@ -16,15 +16,21 @@ export default function Player({ player, id }) {
     const isSelected = selectedPieceIndex === pieceId;
 
     function handleClick(e) {
-        e.stopPropagation();
+        // e.stopPropagation();
 
         if (player !== playerTurn) return;
 
         if (isSelected) {
             setSelectedPieceIndex(-1);
+            handleStoneClicked(cellIdx, -1);
         } else {
             setSelectedPieceIndex(pieceId);
+            handleStoneClicked(cellIdx, pieceId);
         }
+
+        // if(!isSelected)
+        // {
+        // }
     }
 
     const isActiveStyle = isSelected ? "ring-yellow-500 scale-125 opacity-100 shadow-lg z-20 border-0" : "opacity-90 hover:scale-110";
@@ -39,7 +45,7 @@ export default function Player({ player, id }) {
                 backgroundPosition: 'center',
                 // backgroundColor: player === "player1" ? "#334499" : "#992277", 
             }}
-            onClick={(e) => handleClick(e)}
+            onClick={(e) => {handleClick(e); }}
         ></div>
     )
 }

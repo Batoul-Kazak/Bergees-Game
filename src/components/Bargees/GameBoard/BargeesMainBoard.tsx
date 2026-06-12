@@ -46,6 +46,13 @@ export default function BargeesMainBoard() {
     setGameState,
     setPlayerTurn,
     setSelectedPieceIndex,
+    player1WonPieces,
+    player2WonPieces,
+    setPlayer1WonPieces,
+    setPlayer2WonPieces,
+    setMessage,
+    hasWon, 
+    setHasWon
   } = useContext(BargeesGameContext);
 
   const [availableCells, setAvailableCells] = useState([]);
@@ -143,7 +150,10 @@ export default function BargeesMainBoard() {
           });
         }
 
+        const playerWonPieces = playerTurn === "player1" ? player1WonPieces : player2WonPieces;
+        const setPlayerWonPieces = playerTurn === "player1" ? setPlayer1WonPieces : setPlayer2WonPieces;
 
+        setPlayerWonPieces(playerWonPieces => playerWonPieces+1);
         setSelectedPieceIndex(-1);
 
         const hasAlivePiece = updatedPlayerIndices.some(item => item >= 0);
@@ -154,7 +164,6 @@ export default function BargeesMainBoard() {
           return;
         }
 
-        console.log("player ", playerTurn, " indices ", updatedPlayerIndices);
         return;
       }
     }
@@ -260,6 +269,14 @@ export default function BargeesMainBoard() {
     }
   }
   
+  useEffect(() => {
+    const playerWonPieces = playerTurn === "player1" ? player1WonPieces : player2WonPieces;
+    if(playerWonPieces)
+        {
+          setHasWon(true);
+          setMessage(`Player ${playerTurn === "player1" ? "1" : "2"} has won!`);
+        }
+  }, [player1WonPieces, player2WonPieces, playerTurn]);
 
   useEffect(() => {
     if (selectedPieceIndex !== -1 && selectedPieceIndex !== null) {

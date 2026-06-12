@@ -19,7 +19,8 @@ export const PLAYER_1_PATH = [
     {start: 201, end: 208, step: +1},
     {start: 208, end: 189, step: -19},
     {start: 189, end: 182, step: -1},
-    {start: 182, end: 181, step: -1},
+    {start: 182, end: 180, step: -1},
+    // {start: 181, end: 180, step: -1}
 ];
 
 export const PLAYER_2_PATH = [
@@ -39,8 +40,8 @@ export const PLAYER_2_PATH = [
     {start: 141, end: 159, step: +18},  //+19-1
     {start: 159, end: 152, step: -1},  
     {start: 152, end: 171, step: +19},  
-    {start: 171, end: 178, step: +1},  
-    {start: 178, end: 179, step: +1},  
+    {start: 171, end: 179, step: +1},  
+    // {start: 178, end: 179, step: +1},  
 ];
 
 const OUT_CELLS = [28, 47,66,85,104,123,142,218,237,256,275,294,313,332]

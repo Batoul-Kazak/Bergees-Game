@@ -17,7 +17,7 @@ export default function BargeesGame() {
   const [player2ActiveElements, setPlayer2ActiveElements] = useState(0);
   const [playerTurn, setPlayerTurn] = useState("player1");
 
-  const [availableMoves, setAvailableMoves] = useState([[2, 0]]); // [] array that stores two scores [the full, the rest of binj and dust]
+  const [availableMoves, setAvailableMoves] = useState([[10, 1], [10, 1], [2, 0]]); // [] array that stores two scores [the full, the rest of binj and dust]
   //the sum of dust, binj...etc
   // needed especially when you have binj and creation at home1 so the rest is 14
 

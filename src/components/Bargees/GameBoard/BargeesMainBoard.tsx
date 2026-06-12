@@ -25,9 +25,11 @@ import { getTargetOnPath } from "../../../utils/getTargetOnPath";
 import {
   CheckIfCanMove,
   getAvailableSquares,
+  getAvailableSquares2,
   getSelectedPieceCellPosition,
   preventedCell,
 } from "../../../utils/boardHelpers";
+import { canWin } from "../../../utils/canWin";
 export default function BargeesMainBoard() {
   const {
     cowriesGrid,
@@ -89,8 +91,51 @@ export default function BargeesMainBoard() {
   }
 
   function handleStoneClicked(targetCellIdx, selectedPieceIndex) {
+      const MOVES = getAvailableSquares(
+      selectedPieceIndex,
+      playerTurn,
+      player1PiecesIndices,
+      player2PiecesIndices,
+      availableMoves,
+    );
+
+       const SELECTED_PIECE_POSITION = getSelectedPieceCellPosition(
+      selectedPieceIndex,
+      playerTurn,
+      player1PiecesIndices,
+      player2PiecesIndices,
+    );
+    
+
+    const MOVES2 = getAvailableSquares2(
+      SELECTED_PIECE_POSITION  ,
+      playerTurn,
+      player1PiecesIndices,
+      player2PiecesIndices,
+      availableMoves,
+    )
+
+
+    const playerIndices = playerTurn === "player1" ? player1PiecesIndices : player2PiecesIndices;
+    const setPlayerIndices = playerTurn === "player1" ? setPlayer1PiecesIndices : setPlayer2PiecesIndices;
+
+    //check if can click on any win cells 
+    const PLAYER_WIN_IDX = playerTurn === "player1" ? 181 : 179;
+    // const playerCanWin = canWin(availableMoves.flat(), PLAYER_WIN_IDX);
+    console.log("available squares: ", availableCells);
+    if(Number(targetCellIdx) === Number(PLAYER_WIN_IDX))
+    {
+      if(availableCells.flat().includes(targetCellIdx))
+      {
+        const updatedPlayerIndices = [...playerIndices];
+        updatedPlayerIndices[selectedPieceIndex.split("-")[1]] = -2;
+        setPlayerIndices(updatedPlayerIndices);
+        setSelectedPieceIndex(-1);
+        console.log("player ", playerTurn, " indices ", updatedPlayerIndices);
+      }
+    }
+
     //Prevent player from walking on unAllowed stones for him
-    console.log("clicked......");
     if (preventedCell(targetCellIdx)) return;
     
     let ALLOWED_TO_MOVE = true;
@@ -117,14 +162,8 @@ export default function BargeesMainBoard() {
     //Prevent player from walking if doesn't have enough score
     if (availableMoves.length === 0) return;
     
-    const SELECTED_PIECE_POSITION = getSelectedPieceCellPosition(
-      selectedPieceIndex,
-      playerTurn,
-      player1PiecesIndices,
-      player2PiecesIndices,
-    );
-    
-    if (SELECTED_PIECE_POSITION === -1 || SELECTED_PIECE_POSITION === null)
+ 
+    if (SELECTED_PIECE_POSITION === -1 || SELECTED_PIECE_POSITION === null || SELECTED_PIECE_POSITION === -2)
       return;
     
     const currentPath =
@@ -135,14 +174,6 @@ export default function BargeesMainBoard() {
 
     //preventing player from moving but only if the cell is in his path
     if (startIndex === -1 || endIndex === -1) return;
-
-    const MOVES = getAvailableSquares(
-      selectedPieceIndex,
-      playerTurn,
-      player1PiecesIndices,
-      player2PiecesIndices,
-      availableMoves,
-    );
 
     //preventing player from moving on cells that are not available according to his score
     if (!MOVES.flat().includes(targetCellIdx)) return;
@@ -239,7 +270,7 @@ export default function BargeesMainBoard() {
         return (
           <div
             key={index}
-            className={`border-[0.5px] inset-0 relative cursor-pointer 
+            className={`border-[0.5px] inset-0 relative ${!isHidden ? "cursor-pointer" : "cursor-default"} 
                         flex justify-center items-center ${StoneColor(index)} font-bold text-red-950 text-[12px] w-9 h-9`}
             onClick={() => handleStoneClicked(index, selectedPieceIndex)}
           >

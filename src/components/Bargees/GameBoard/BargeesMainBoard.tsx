@@ -130,8 +130,32 @@ export default function BargeesMainBoard() {
         const updatedPlayerIndices = [...playerIndices];
         updatedPlayerIndices[selectedPieceIndex.split("-")[1]] = -2;
         setPlayerIndices(updatedPlayerIndices);
+
+        const currentPath = playerTurn === "player1" ? PATH_1_INDICES : PATH_2_INDICES;
+        const stepsUsed = currentPath.indexOf(PLAYER_WIN_IDX) - currentPath.indexOf(SELECTED_PIECE_POSITION);
+
+        const moveIndexToRemove = availableMoves.findIndex(move => move[0] === stepsUsed);
+        if (moveIndexToRemove !== -1) {
+          setAvailableMoves(prev => {
+            const newMoves = [...prev];
+            newMoves.splice(moveIndexToRemove, 1);
+            return newMoves;
+          });
+        }
+
+
         setSelectedPieceIndex(-1);
+
+        const hasAlivePiece = updatedPlayerIndices.some(item => item >= 0);
+        const canSpawn = availableMoves.flat().includes(10) || availableMoves.flat().includes(24);
+
+        if (!hasAlivePiece && !canSpawn) {
+          setPlayerTurn(prev => prev === "player1" ? "player2" : "player1");
+          return;
+        }
+
         console.log("player ", playerTurn, " indices ", updatedPlayerIndices);
+        return;
       }
     }
 
@@ -235,6 +259,7 @@ export default function BargeesMainBoard() {
       setSelectedPieceIndex(-1);
     }
   }
+  
 
   useEffect(() => {
     if (selectedPieceIndex !== -1 && selectedPieceIndex !== null) {

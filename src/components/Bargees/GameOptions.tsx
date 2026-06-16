@@ -44,7 +44,7 @@ export default function GameOptions() {
     availableMoves.length > 0
       ? availableMoves.reduce((acc, move) => acc + move[1], 0)
       : 0;
-      
+
   const CAN_CREATE_ELEMENT =
     getAvailableMoveNames(availableMoves).includes("dust") ||
     getAvailableMoveNames(availableMoves).includes("binj");
@@ -77,6 +77,30 @@ export default function GameOptions() {
   }
 
   function handleShakingAndThrow() {
+  //  const lastMove = availableMoves[availableMoves.length - 1];
+    const lastMove = JSON.stringify(availableMoves.at(-1));
+    const two = JSON.stringify([2,0]); 
+    const three = JSON.stringify([3,0]);
+    const four = JSON.stringify([4,0]);
+    const isLastMove = lastMove === two || lastMove === three || lastMove === four;
+    const playerActiveElements = playerTurn === "player1" ? player1ActiveElements : player2ActiveElements;
+    const canMove = CAN_CREATE_ELEMENT || playerActiveElements > 0; 
+    if(gameState === "turnEnds" && isLastMove && canMove)
+    {
+      return;
+    }
+ 
+    // console.log(gameState)
+    // console.log(isLastMove)
+    // console.log(!canMove)
+    if((gameState === "turnEnds" && isLastMove && !canMove) || (isLastMove && !canMove))
+    {
+      console.log("player: ", playerTurn);
+      setPlayerTurn((prev: string) => prev === "player1" ? "player2" : "player1");
+      setGameState("idle");
+      return;
+    }
+   
     const frontSideCowriesCount = Math.floor(Math.random() * 7);
 
     const cowries = [
@@ -94,9 +118,6 @@ export default function GameOptions() {
     setAvailableMoves((prev) => [...prev, newValue]);
 
     const isLastShake = frontSideCowriesCount >= 2 && frontSideCowriesCount <= 4;
-    if (isLastShake) {
-      setGameState("turnEnds");
-    }
 
     const PLAYER_ACTIVE_ELEMENTS = playerTurn === "player1" ? player1ActiveElements : player2ActiveElements;
     if(isLastShake && !CAN_CREATE_ELEMENT && PLAYER_ACTIVE_ELEMENTS === 0)
@@ -105,6 +126,12 @@ export default function GameOptions() {
         setPlayerTurn((prev) => (prev === "player1" ? "player2" : "player1"));
         setAvailableMoves([]);
         console.log("gameState: ", gameState, " playerTurn: ", playerTurn)
+        return;
+    }
+
+    if (isLastShake) {
+      setGameState("turnEnds");
+      return;
     }
   }
 
@@ -127,6 +154,32 @@ export default function GameOptions() {
 
     setIsShowCreationDialog(true);
   }
+
+  // useEffect(() => {
+    // const lastMove = availableMoves[availableMoves.length - 1];
+    // const lastMove = JSON.stringify(availableMoves.at(-1));
+    // const two = JSON.stringify([2,0]); 
+    // const three = JSON.stringify([3,0]);
+    // const four = JSON.stringify([4,0]);
+    // const isLastMove = lastMove === two || lastMove === three || lastMove === four;
+    // const playerActiveElements = playerTurn === "player1" ? player1ActiveElements : player2ActiveElements;
+    // const canMove = CAN_CREATE_ELEMENT || playerActiveElements > 0; 
+    // if(gameState === "turnEnds" && isLastMove && canMove)
+    // {
+      // return;
+    // }
+
+    // console.log(gameState)
+    // console.log(isLastMove)
+    // console.log(!canMove)
+    // if((gameState === "turnEnds" && isLastMove && !canMove) || (isLastMove && !canMove))
+    // {
+      // console.log("player: ", playerTurn);
+      // setPlayerTurn((prev: string) => prev === "player1" ? "player2" : "player1");
+      // setGameState("idle");
+      // return;
+    // }
+  // }, [gameState, availableMoves, playerTurn, player1ActiveElements, player2ActiveElements, CAN_CREATE_ELEMENT]);
 
   return (
     <div className="w-75 rounded-4xl pb-5 bg-wood-500 border-wood-700 border-6 flex items-center flex-col justify-center">

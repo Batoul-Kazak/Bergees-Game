@@ -6,6 +6,7 @@ import BargeesMainBoard from "./GameBoard/BargeesMainBoard";
 import CreationDialog from "./GameBoard/CreationDialog";
 import MessageDialog from "./GameBoard/MessageDialog";
 import WinningDialog from "./GameBoard/WinningDialog";
+import { TwoK } from "@mui/icons-material";
 
 export default function BargeesGame() {
   const GRID_SIZE = 19;
@@ -18,7 +19,7 @@ export default function BargeesGame() {
   const [player2ActiveElements, setPlayer2ActiveElements] = useState(0);
   const [playerTurn, setPlayerTurn] = useState("player1");
 
-  const [availableMoves, setAvailableMoves] = useState([[10, 1], [10, 1], [10, 1], [6, 0], [10, 1], [24, 1], [24, 1], [12, 0], [24, 1], [24, 1], [6, 0], [2, 0]]); // [] array that stores two scores [the full, the rest of binj and dust]
+  const [availableMoves, setAvailableMoves] = useState([]); // [] array that stores two scores [the full, the rest of binj and dust]
   //the sum of dust, binj...etc
   // needed especially when you have binj and creation at home1 so the rest is 14
 
@@ -31,7 +32,7 @@ export default function BargeesGame() {
   const [cowriesGrid, setCowriesGrid] = useState([]);
 
   const [player1PiecesIndices, setPlayer1PiecesIndices] = useState([
-    314, -2, -2, -2,
+    -1, -1, -1, -1,
   ]); //-1 means not activated pieces //-2 means winned piece
 
   //###THIS RULE IS NO LONGER NEEDED

@@ -30,6 +30,7 @@ import {
   preventedCell,
 } from "../../../utils/boardHelpers";
 import { canWin } from "../../../utils/canWin";
+import { getAvailableMoveNames } from "../../../utils/getAvailableMoveNames";
 export default function BargeesMainBoard() {
   const {
     cowriesGrid,
@@ -38,6 +39,8 @@ export default function BargeesMainBoard() {
     player2PiecesIndices,
     setPlayer1PiecesIndices,
     setPlayer2PiecesIndices,
+    player1ActiveElements,
+    player2ActiveElements,
     availableMoves,
     selectedPieceIndex,
     playerTurn,
@@ -126,7 +129,6 @@ export default function BargeesMainBoard() {
     const playerIndices = playerTurn === "player1" ? player1PiecesIndices : player2PiecesIndices;
     const setPlayerIndices = playerTurn === "player1" ? setPlayer1PiecesIndices : setPlayer2PiecesIndices;
 
-    //check if can click on any win cells 
     const PLAYER_WIN_IDX = playerTurn === "player1" ? 181 : 179;
     // const playerCanWin = canWin(availableMoves.flat(), PLAYER_WIN_IDX);
     console.log("available squares: ", availableCells);
@@ -226,6 +228,24 @@ export default function BargeesMainBoard() {
 
     if (selectedPlayer !== playerTurn) return;
 
+    // const CAN_CREATE_ELEMENT =
+        // getAvailableMoveNames(availableMoves).includes("dust") ||
+        // getAvailableMoveNames(availableMoves).includes("binj");
+
+    // const isTimeToSwitchPlayerTurn = availableMoves[0] === "two" || availableMoves[0] === "three" || availableMoves[0] === "four";
+    // if (availableMoves.length === 1 && isTimeToSwitchPlayerTurn) {
+      // setGameState("turnEnds");
+    // }
+// 
+    // const PLAYER_ACTIVE_ELEMENTS = playerTurn === "player1" ? player1ActiveElements : player2ActiveElements;
+    // if(isTimeToSwitchPlayerTurn && !CAN_CREATE_ELEMENT && PLAYER_ACTIVE_ELEMENTS === 0)
+    // {
+        // setGameState("idle");
+        // setPlayerTurn((prev) => (prev === "player1" ? "player2" : "player1"));
+        // setAvailableMoves([]);
+        // console.log("gameState: ", gameState, " playerTurn: ", playerTurn)
+    // }
+
     //player can move everywhere
     const setPieces =
       selectedPlayer === "player1"
@@ -271,11 +291,12 @@ export default function BargeesMainBoard() {
   
   useEffect(() => {
     const playerWonPieces = playerTurn === "player1" ? player1WonPieces : player2WonPieces;
-    if(playerWonPieces)
-        {
-          setHasWon(true);
-          setMessage(`Player ${playerTurn === "player1" ? "1" : "2"} has won!`);
-        }
+    if(playerWonPieces === 4)
+    {
+        setHasWon(true);
+        setMessage(`Player ${playerTurn === "player1" ? "1" : "2"} has won!`);
+    }
+
   }, [player1WonPieces, player2WonPieces, playerTurn]);
 
   useEffect(() => {

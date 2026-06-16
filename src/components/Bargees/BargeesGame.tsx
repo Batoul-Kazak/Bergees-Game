@@ -5,6 +5,7 @@ import GameOptions from "./GameOptions";
 import BargeesMainBoard from "./GameBoard/BargeesMainBoard";
 import CreationDialog from "./GameBoard/CreationDialog";
 import MessageDialog from "./GameBoard/MessageDialog";
+import WinningDialog from "./GameBoard/WinningDialog";
 
 export default function BargeesGame() {
   const GRID_SIZE = 19;
@@ -17,7 +18,7 @@ export default function BargeesGame() {
   const [player2ActiveElements, setPlayer2ActiveElements] = useState(0);
   const [playerTurn, setPlayerTurn] = useState("player1");
 
-  const [availableMoves, setAvailableMoves] = useState([[10, 1], [10, 1], [10, 1], [6, 1], [10, 1], [24, 1], [24, 1], [12, 1], [24, 1], [24, 1], [6, 0], [2, 0]]); // [] array that stores two scores [the full, the rest of binj and dust]
+  const [availableMoves, setAvailableMoves] = useState([[10, 1], [10, 1], [10, 1], [6, 0], [10, 1], [24, 1], [24, 1], [12, 0], [24, 1], [24, 1], [6, 0], [2, 0]]); // [] array that stores two scores [the full, the rest of binj and dust]
   //the sum of dust, binj...etc
   // needed especially when you have binj and creation at home1 so the rest is 14
 
@@ -42,7 +43,7 @@ export default function BargeesGame() {
 
   const [message, setMessage] = useState("");
   const [hasWon, setHasWon] = useState(false);
-
+  const [playersTotalScore, setPlayerTotalScore] = useState([0,0]);
   // const [globalBoard, setGlobalBoard] = useState<string | null[]>(Array(24).fill(null));
 
   return (
@@ -61,8 +62,6 @@ export default function BargeesGame() {
           setPlayerTurn,
           gameState,
           setGameState,
-          // availableMoveNames,
-          // setAvailableMoveNames,
           setAvailableMoves,
           availableMoves,
           selectedPieceIndex,
@@ -85,7 +84,9 @@ export default function BargeesGame() {
           message,
           setMessage,
           hasWon, 
-          setHasWon
+          setHasWon,
+          playersTotalScore,
+          setPlayerTotalScore
         }}
       >
         <div className="flex-shrink-0 z-0">
@@ -101,8 +102,8 @@ export default function BargeesGame() {
             <CreationDialog />
           </>
         )}
-        {message && <MessageDialog />}
-        {hasWon && <MessageDialog />}
+        {message && !hasWon && <MessageDialog />}
+        {hasWon && <WinningDialog />}
       </BargeesGameContext.Provider>
     </div>
   );

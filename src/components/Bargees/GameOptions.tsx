@@ -44,6 +44,7 @@ export default function GameOptions() {
     availableMoves.length > 0
       ? availableMoves.reduce((acc, move) => acc + move[1], 0)
       : 0;
+      
   const CAN_CREATE_ELEMENT =
     getAvailableMoveNames(availableMoves).includes("dust") ||
     getAvailableMoveNames(availableMoves).includes("binj");
@@ -74,6 +75,7 @@ export default function GameOptions() {
         return [6, 0];
     }
   }
+
   function handleShakingAndThrow() {
     const frontSideCowriesCount = Math.floor(Math.random() * 7);
 
@@ -127,25 +129,25 @@ export default function GameOptions() {
   }
 
   return (
-    <div className="w-75 rounded-2xl pb-5 bg-wood-500 flex items-center flex-col justify-center">
+    <div className="w-75 rounded-4xl pb-5 bg-wood-500 border-wood-700 border-6 flex items-center flex-col justify-center">
       <h2 className="font-bold rounded-tr-2xl rounded-tl-2xl bg-wood-700 w-full py-4 text-xl text-center">
         Bergees Game
       </h2>
       <h1 className=" border-black-500 font-bold pt-2">{playerTurn} Turn</h1>
-      <h2 className="pt-4 font-bold">
-        Total Cowries Value: {TOTAL_COWRIES_VALUE}{" "}
+      <h2 className="pt-1 pt-2">
+        Total Cowries Value: <span className="text-yellow-700 bg-wood-700/30 font-bold px-2">{TOTAL_COWRIES_VALUE}</span> steps{" "}
       </h2>
-      <h2 className="pt-4 font-bold">
-        Main Cowries Value: {MAIN_COWRIES_VALUE}{" "}
+      <h2 className="pt-1">
+        Main Cowries Value: <span className="text-mint-500 bg-wood-700/30 font-bold px-2">{MAIN_COWRIES_VALUE}</span> steps{" "}
       </h2>
-      <h2 className="pt-4 font-bold">
-        Rest Cowries Value: {REST_COWRIES_VALUE}{" "}
+      <h2 className="pt-1 pb-2 text-[14px]">
+        Rest Cowries Value: <span className="text-red-700  bg-wood-700/30 font-bold px-2">{REST_COWRIES_VALUE}</span> separated steps{" "}
       </h2>
       <div className="pt-2 font-bold place-self-start pl-4 flex gap-1">
         Current Score:
-        <div className="pr-4 font-normal flex flex-wrap gap-1">
+        <div className="pr-4 font-normal flex flex-wrap gap-1 max-h-[60px] overflow-y-auto">
           {getAvailableMoveNames(availableMoves).map((value, index) => (
-            <span key={index} className="bg-red-700 px-2 rounded-2xl">
+            <span key={index} className="bg-wood-700 text-yellow-200 text-[15px] px-2 rounded-[5px]">
               {value}
             </span>
           ))}
@@ -167,18 +169,18 @@ export default function GameOptions() {
           playerWonPieces={player2WonPieces}
         />
       </div>
-      <div className="flex flex-col gap-2 font-bold">
+      <div className="flex flex-col w-[80%] gap-2 font-bold">
         <button
           onClick={handleCreateElement}
           disabled={!CAN_CREATE_ELEMENT}
-          className={`${CAN_CREATE_ELEMENT ? "bg-yellow-700" : "bg-gray-700"} border-black-500 p-2 border-2 rounded-xl mt-2`}
+          className={`${CAN_CREATE_ELEMENT ? "bg-yellow-700" : "bg-gray-700"} border-black-500 p-2 border-2 rounded-xl`}
         >
           Create Element
         </button>
         <button
           onClick={handleGameButtonClicked}
           disabled={gameState === "turnEnds"}
-          className={`${gameState !== "playing" ? "bg-mint-700" : "bg-gray-700"} border-2 font-bold border-black-500 py-2 px-6 rounded-2xl`}
+          className={`${gameState !== "playing" ? "bg-mint-700" : "bg-gray-700"} border-2 font-bold border-black-500 p-2 rounded-2xl`}
         >
           {optionButtonText}
         </button>

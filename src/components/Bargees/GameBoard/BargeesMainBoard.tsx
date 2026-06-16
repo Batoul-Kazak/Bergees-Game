@@ -25,7 +25,7 @@ import { getTargetOnPath } from "../../../utils/getTargetOnPath";
 import {
   CheckIfCanMove,
   getAvailableSquares,
-  getAvailableSquares2,
+  // getAvailableSquares2,
   getSelectedPieceCellPosition,
   preventedCell,
 } from "../../../utils/boardHelpers";
@@ -114,13 +114,13 @@ export default function BargeesMainBoard() {
     );
     
 
-    const MOVES2 = getAvailableSquares2(
-      SELECTED_PIECE_POSITION  ,
-      playerTurn,
-      player1PiecesIndices,
-      player2PiecesIndices,
-      availableMoves,
-    )
+    // const MOVES2 = getAvailableSquares2(
+    //   SELECTED_PIECE_POSITION  ,
+    //   playerTurn,
+    //   player1PiecesIndices,
+    //   player2PiecesIndices,
+    //   availableMoves,
+    // )
 
 
     const playerIndices = playerTurn === "player1" ? player1PiecesIndices : player2PiecesIndices;

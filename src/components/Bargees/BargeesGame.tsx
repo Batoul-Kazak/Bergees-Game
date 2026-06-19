@@ -17,9 +17,9 @@ export default function BargeesGame() {
   const [gameState, setGameState] = useState("idle"); //playing | finished | waiting | idle
   const [player1ActiveElements, setPlayer1ActiveElements] = useState(0);
   const [player2ActiveElements, setPlayer2ActiveElements] = useState(0);
-  const [playerTurn, setPlayerTurn] = useState("player1");
+  const [playerTurn, setPlayerTurn] = useState("player2");
 
-  const [availableMoves, setAvailableMoves] = useState([]); // [] array that stores two scores [the full, the rest of binj and dust]
+  const [availableMoves, setAvailableMoves] = useState([[2,0], [4,0]]); // [] array that stores two scores [the full, the rest of binj and dust]
   //the sum of dust, binj...etc
   // needed especially when you have binj and creation at home1 so the rest is 14
 
@@ -39,7 +39,7 @@ export default function BargeesGame() {
   //and each piece created added to the end of the array (in ordered way)
   //e.g. [-1,4,102,6] and [-1,-1,-1,5] are correct but [-1,3,5,-1] and [5, -1, -1, -1] aren't allowed
   const [player2PiecesIndices, setPlayer2PiecesIndices] = useState([
-    -1, 276, -1, -1,
+    -1, 170, -1, -1,
   ]);
 
   const [message, setMessage] = useState("");

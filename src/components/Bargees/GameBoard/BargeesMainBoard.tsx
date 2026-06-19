@@ -25,6 +25,7 @@ import { getTargetOnPath } from "../../../utils/getTargetOnPath";
 import {
   CheckIfCanMove,
   getAvailableSquares,
+  getFlattedAvailableSquares,
   // getAvailableSquares2,
   getSelectedPieceCellPosition,
   preventedCell,
@@ -327,7 +328,15 @@ export default function BargeesMainBoard() {
 
   useEffect(() => {
     if (selectedPieceIndex !== -1 && selectedPieceIndex !== null) {
-      const moves = getAvailableSquares(selectedPieceIndex, playerTurn, player1PiecesIndices, player2PiecesIndices, availableMoves);
+      // const moves = getAvailableSquares(selectedPieceIndex, playerTurn, player1PiecesIndices, player2PiecesIndices, availableMoves);
+
+      const moves = getFlattedAvailableSquares(
+        selectedPieceIndex,
+        playerTurn,
+        player1PiecesIndices,
+        player2PiecesIndices,
+        availableMoves);
+
       setAvailableCells(moves);
 
       const opponentPositions = playerTurn === "player1" ? player2PiecesIndices : player1PiecesIndices;

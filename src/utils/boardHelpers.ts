@@ -3,6 +3,7 @@ import { PLAYER_1_PATH, PLAYER_2_PATH } from "../constants/boardPaths";
 import { WIN_CELLS } from "../constants/boardWinCells";
 import { getTargetOnPath } from "./getTargetOnPath";
 import { PATH_1_INDICES } from "./pathUtils";
+import { PLAYER_1_HOME_1, PLAYER_2_HOME_1 } from "../constants/boardHomes";
 
 const GRID_SIZE = 19;
 
@@ -55,7 +56,7 @@ export function getAvailableSquares(
     player2PiecesIndices
   );
 
-  const availableSquares = [];
+  const availableSquares: number[] = [];
 
   //   if(!availableMoves || Array.isArray(availableMoves)) return [];
 
@@ -84,7 +85,51 @@ export function getAvailableSquares(
 
     availableSquares.push(position);
   });
+
+  // *this solution is the best but i won't return a Set because i treated this function as array in many places
+  // const flattedAvailableSquares = availableSquares.flat(2);
+  // const uniqueAvailableSquares = new Set(flattedAvailableSquares);
+  // const opponentHome = playerTurn === "player1" ? PLAYER_2_HOME_1 : PLAYER_1_HOME_1;
+  // uniqueAvailableSquares.forEach(item => {
+  //   if(item === opponentHome)
+  //     uniqueAvailableSquares.delete(item); 
+  // })
+  
+  // const result = availableSquares.filter(item => item !== opponentHome);
+  console.log(availableSquares);
   return availableSquares;
+}
+
+export function getFlattedAvailableSquares(
+  selectedPieceIndex,
+  playerTurn,
+  player1PiecesIndices,
+  player2PiecesIndices,
+  availableMoves)
+{
+  // **this function flatten + make the items of the original function unique
+  
+  const flattedAvailableSquares = getAvailableSquares(
+  selectedPieceIndex,
+  playerTurn,
+  player1PiecesIndices,
+  player2PiecesIndices,
+  availableMoves).flat(2);
+
+  const uniqueAvailableSquares = new Set(flattedAvailableSquares);
+  const opponentHome = playerTurn === "player1" ? PLAYER_2_HOME_1 : PLAYER_1_HOME_1;
+  uniqueAvailableSquares.forEach(item => {
+    if(item === opponentHome)
+      uniqueAvailableSquares.delete(item); 
+  })
+
+  const result: number[] = [];
+  uniqueAvailableSquares.forEach(item => {
+    result.push(item);
+  })
+
+  return result;
+  
 }
 
 export function CheckIfCanMove(arr, isAllowed, targetIdx) {

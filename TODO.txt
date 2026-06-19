@@ -5,6 +5,14 @@ TODO:
     -player1 can kill player2 and vise versa
     -add timer for each player to move in his turn (around 20 seconds) OR according to available moves he has
 
+//*******VERY ESSENTIAL FIX: MAKE WHEN PLAYER1 HAS MORE THAN ONE PIECE AND HE MOVES ONE 
+OF HIS PIECES ON THE STONE THAT CONTAINS OTHER PIECE HE HAS PREVENT ABILITY TO SELECT HIS OTHER PIECES ON THAT TARGET STONE
+=>> TO PREVENT ERROR OF LOSING MORE THAN ONE AVAILABLE MOVES AT ONCE 
+=>> TRY IT TO UNDERSTAND THE BUG IN MORE CLEAR WAY
+
+NOTE: THAT PROBLEM DOESN'T HAPPEN WHEN PLAYER CLICK ON THE STONE DIRECTLY NOT ON HIS OTHER PIECE SITTING ON THAT STONE
+
+
 ***Extra Features:
     1.make the website with Navbar and many settings 
         -light/dark mode

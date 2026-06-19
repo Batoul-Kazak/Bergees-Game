@@ -21,13 +21,13 @@ import {
 import Cowrie from "./Cowrie";
 import Player from "./Player";
 import { PATH_1_INDICES, PATH_2_INDICES } from "../../../utils/pathUtils";
-import { getTargetOnPath } from "../../../utils/getTargetOnPath";
 import {
   CheckIfCanMove,
   getAvailableSquares,
   getFlattedAvailableSquares,
   // getAvailableSquares2,
   getSelectedPieceCellPosition,
+  getUsedMoveIndices,
   preventedCell,
 } from "../../../utils/boardHelpers";
 import { canWin } from "../../../utils/canWin";
@@ -280,22 +280,48 @@ export default function BargeesMainBoard() {
     const setOpponentPositions = playerTurn === "player1" ? setPlayer2PiecesIndices : setPlayer1PiecesIndices;
     setOpponentPositions((prev) => prev.filter(pos => pos !== targetCellIdx));
 
-    const usedScoreIndex = availableMoves.findIndex((scoreItem) => {
-      const calculatedPos = getTargetOnPath(
+    // const usedScoreIndex = availableMoves.findIndex((scoreItem: [number, number]) => {
+      // const [step_option1, step_option2] = scoreItem;
+      // const calculatedPositions = getTargetOnPathTwoStepParameters(
+        // playerTurn,
+        // SELECTED_PIECE_POSITION,
+        // step_option1, step_option2);
+      // return calculatedPositions.includes(targetCellIdx) ? calculatedPositions : -1;
+    // });
+// 
+    // console.log(usedScoreIndex);
+// 
+    // if (usedScoreIndex === -1) return;
+    // console.log(usedScoreIndex);
+    // setAvailableMoves((prev) => {
+      // const newMoves = [...prev];
+      // newMoves.splice(usedScoreIndex, 1);
+      // return newMoves;
+    // });
+
+      const [outerIdx, innerIdx] = getUsedMoveIndices(
         playerTurn,
         SELECTED_PIECE_POSITION,
-        scoreItem[0],
+        targetCellIdx,
+        availableMoves
       );
-      return calculatedPos === targetCellIdx;
-    });
+      
+      if (outerIdx === -1) return;
+      
+      setAvailableMoves(prev => {
+        const updatedMoves = prev.map((move, i) => {
+          if(i === outerIdx)
+          {
+            const newMove = [...move];
+            newMove[innerIdx] = 0;
+            return newMove;
+          }
+          return move;
+        });
 
-    if (usedScoreIndex === -1) return;
-
-    setAvailableMoves((prev) => {
-      const newMoves = [...prev];
-      newMoves.splice(usedScoreIndex, 1);
-      return newMoves;
-    });
+        const filteredMoves = updatedMoves.filter(move => !(move[0] === 0 && move[1] === 0));
+        return filteredMoves;
+      })
 
     // turn of shaking for the player
     if (gameState === "turnEnds" && availableMoves.length === 1) {

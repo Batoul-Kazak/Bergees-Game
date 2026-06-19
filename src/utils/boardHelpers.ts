@@ -1,9 +1,8 @@
 import { Forward } from "@mui/icons-material";
-import { PLAYER_1_PATH, PLAYER_2_PATH } from "../constants/boardPaths";
 import { WIN_CELLS } from "../constants/boardWinCells";
-import { getTargetOnPath } from "./getTargetOnPath";
-import { PATH_1_INDICES } from "./pathUtils";
+import { PATH_1_INDICES, PATH_2_INDICES } from "./pathUtils";
 import { PLAYER_1_HOME_1, PLAYER_2_HOME_1 } from "../constants/boardHomes";
+import { getTargetOnPath } from "./getTargetOnPath";
 
 const GRID_SIZE = 19;
 
@@ -70,7 +69,7 @@ export function getAvailableSquares(
     const TARGET_CELL_POSITION_1 = getTargetOnPath(
       playerTurn,
       START_INDEX,
-      score[0] //for the main value (in case it is dust/binj)
+      score[0], //for the main value (in case it is dust/binj)
     );
     const TARGET_CELL_POSITION_2 = getTargetOnPath(
       playerTurn,
@@ -140,6 +139,37 @@ export function CheckIfCanMove(arr, isAllowed, targetIdx) {
     }
   });
   return isAllowed;
+}
+
+
+// **i made this function to use to be able to identify the used availableMoves item to delete from moves after player is moved 
+// ** this function returns array of two elements [index of first layer, index of the inner layer] for example [2,1] 
+
+//**which means of this array [[6, 0], [12, 0],[10,1]] */ get number 1
+export function getUsedMoveIndices(
+  player: string,
+  firstPosition: number,
+  targetCellIdx: number,
+  availableMoves: [number, number][]
+): [number, number] {
+  const PATH = player === "player1" ? PATH_1_INDICES : PATH_2_INDICES;
+  const firstIdx_onPath = PATH.findIndex(el => el === firstPosition);
+
+  for (let i = 0; i < availableMoves.length; i++) {
+    const [step1, step2] = availableMoves[i];
+
+    const pos1 = firstIdx_onPath + step1;
+    if (pos1 < PATH.length && PATH[pos1] === targetCellIdx) {
+      return [i, 0];  
+    }
+
+    const pos2 = firstIdx_onPath + step2;
+    if (pos2 < PATH.length && PATH[pos2] === targetCellIdx) {
+      return [i, 1]; 
+    }
+  }
+
+  return [-1, -1]; 
 }
 
 // export function getAvailableSquares2( selectedPieceIndex: number,

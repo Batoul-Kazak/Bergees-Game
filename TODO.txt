@@ -46,3 +46,12 @@ NOTE: THAT PROBLEM DOESN'T HAPPEN WHEN PLAYER CLICK ON THE STONE DIRECTLY NOT ON
 -something like mario or diamond rush (needs svg images to be able to use not squared shapes (transparent background))
 -Regicide or FreeCell
 -move the block puzzle
+-memory game
+
+other options
+"checkers" | "tic-tac-toe" | "connect-four" | "go" |
+ "reversi" | "backgammon" | "dominoes" | "mahjong" |
+  "scrabble" | "poker" | "bridge" | "hearts" | "spades" 
+  | "uno" | "monopoly" | "risk" | "settlers-of-catan" | "carcassonne" 
+  | "ticket-to-ride" | "pandemic" | "codenames" | 
+"7-wonders" | "splendor" | "azul";

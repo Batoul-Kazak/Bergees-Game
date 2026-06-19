@@ -3,8 +3,8 @@ import React from 'react'
 import { useContext } from "react";
 import { BargeesGameContext } from '../../../contexts/BargeesGameContext';
 
-import player1Img from "./../../../../public/images/solider.png";
-import player2Img from "./../../../../public/images/horse.png";
+import player1Img from "../../../../public/images/solider.png";
+import player2Img from "../../../../public/images/horse.png";
 
 export default function Player({ player, id, handleStoneClicked, cellIdx }) {
     const { selectedPieceIndex,

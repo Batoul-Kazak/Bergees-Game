@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
-import CowrieFrontSide from "./../../../../public/images/CowrieShellFrontSide.png"
-import CowrieBackSide from "./../../../../public/images/CowrieShellBackSide.png"
+import CowrieFrontSide from "../../../../public/images/CowrieShellFrontSide.png"
+import CowrieBackSide from "../../../../public/images/CowrieShellBackSide.png"
 // import rockSound from "../../../assets/sounds/rock-sound.aac"
 
 

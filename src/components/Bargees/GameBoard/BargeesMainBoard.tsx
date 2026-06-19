@@ -32,7 +32,7 @@ import {
 } from "../../../utils/boardHelpers";
 import { canWin } from "../../../utils/canWin";
 import { getAvailableMoveNames } from "../../../utils/getAvailableMoveNames";
-import rockSound from "./../../../assets/sounds/rock-sound.mp3"
+import rockSound from "../../../assets/sounds/rock-sound.mp3"
 
 export default function BargeesMainBoard() {
   const {
@@ -376,7 +376,7 @@ export default function BargeesMainBoard() {
 
   return (
     <div
-      className="grid bg-black shadow-2xl -rotate-45 rounded-[1px] overflow-hidden "
+      className="grid dark:bg-black bg-white shadow-2xl -rotate-45 rounded-[1px] overflow-hidden "
       style={{
         gridTemplateColumns: "repeat(19, 1fr)",
         width: "min(60vw, 760px)",

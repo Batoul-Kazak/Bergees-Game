@@ -19,7 +19,7 @@ export default function BargeesGame() {
   const [player2ActiveElements, setPlayer2ActiveElements] = useState(0);
   const [playerTurn, setPlayerTurn] = useState("player1");
 
-  const [availableMoves, setAvailableMoves] = useState([[6,0],[4,0],[10,1]]); // [] array that stores two scores [the full, the rest of binj and dust]
+  const [availableMoves, setAvailableMoves] = useState([]); // [] array that stores two scores [the full, the rest of binj and dust]
   //the sum of dust, binj...etc
   // needed especially when you have binj and creation at home1 so the rest is 14
 
@@ -32,7 +32,7 @@ export default function BargeesGame() {
   const [cowriesGrid, setCowriesGrid] = useState([]);
 
   const [player1PiecesIndices, setPlayer1PiecesIndices] = useState([
-    -1, -1, 190, 194,
+    -1, -1, -1, -1,
   ]); //-1 means not activated pieces //-2 means winned piece
 
   //###THIS RULE IS NO LONGER NEEDED
@@ -49,8 +49,8 @@ export default function BargeesGame() {
 
   return (
     <div
-      className="rounded-3xl border-2 border-double 
-                flex justify-evenly w-screen h-screen items-center  relative md:flex-col lg:flex-row
+      className="rounded-3xl dark:bg-black bg-white pt-10
+              flex justify-evenly w-screen h-screen items-center  relative md:flex-col lg:flex-row
             "
     >
       <BargeesGameContext.Provider

@@ -40,4 +40,9 @@ NOTE: THAT PROBLEM DOESN'T HAPPEN WHEN PLAYER CLICK ON THE STONE DIRECTLY NOT ON
             -player got (two || three || four) but didn't move or create element
             -player can create element or (if has enough score for that) IF NOT => set state to "idle" again
 
-
+****Later on add these games to make this web app a collection of games
+-Chess
+-Dama
+-something like mario or diamond rush (needs svg images to be able to use not squared shapes (transparent background))
+-Regicide or FreeCell
+-move the block puzzle

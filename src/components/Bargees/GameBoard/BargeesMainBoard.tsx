@@ -1,4 +1,4 @@
-import { useEffect, useContext, useState } from "react";
+import { useEffect, useContext, useState, useMemo } from "react";
 import { BargeesGameContext } from "../../../contexts/BargeesGameContext";
 import {
   FORBIDDEN_CELLS,
@@ -31,6 +31,8 @@ import {
 } from "../../../utils/boardHelpers";
 import { canWin } from "../../../utils/canWin";
 import { getAvailableMoveNames } from "../../../utils/getAvailableMoveNames";
+import rockSound from "./../../../assets/sounds/rock-sound.mp3"
+
 export default function BargeesMainBoard() {
   const {
     cowriesGrid,
@@ -57,9 +59,11 @@ export default function BargeesMainBoard() {
     hasWon, 
     setHasWon
   } = useContext(BargeesGameContext);
-
+  
   const [availableCells, setAvailableCells] = useState([]);
   const [killingCells, setKillingCells] = useState([]);
+  
+  const rockAudio = useMemo(() => new Audio(rockSound), []);
 
   // note: Download the tailwind function to merge classes
   function StoneColor(index) {
@@ -100,7 +104,18 @@ export default function BargeesMainBoard() {
     return baseStyle;
   }
 
+  // function playSound()
+  // {
+
+    function playRockSound()
+    {
+        rockAudio.currentTime = 0;
+        rockAudio.play();
+    }
+  // }
+
   function handleStoneClicked(targetCellIdx, selectedPieceIndex) {
+
       const MOVES = getAvailableSquares(
       selectedPieceIndex,
       playerTurn,
@@ -124,6 +139,8 @@ export default function BargeesMainBoard() {
     //   player2PiecesIndices,
     //   availableMoves,
     // )
+
+    playRockSound();
 
 
     const playerIndices = playerTurn === "player1" ? player1PiecesIndices : player2PiecesIndices;
@@ -288,6 +305,15 @@ export default function BargeesMainBoard() {
       setSelectedPieceIndex(-1);
     }
   }
+
+  function getPlayersCountOnStone(player: string, stoneIndex: number)
+  {
+    let cnt = 0;
+    const playerPiecesIndices = player === "player1" ? player1PiecesIndices : player2PiecesIndices;
+    
+      playerPiecesIndices.forEach((pieceIdx:number) => (pieceIdx === stoneIndex) ? cnt++ : cnt);
+    return cnt;
+  }
   
   useEffect(() => {
     const playerWonPieces = playerTurn === "player1" ? player1WonPieces : player2WonPieces;
@@ -331,7 +357,7 @@ export default function BargeesMainBoard() {
           winCellIndex !== -1 ? cowriesGrid[winCellIndex] : null;
 
         return (
-          <div
+          <button
             key={index}
             className={`border-[0.5px] inset-0 relative ${!isHidden ? "cursor-pointer" : "cursor-default"} 
                         flex justify-center items-center ${StoneColor(index)} font-bold text-red-950 text-[12px] w-9 h-9`}
@@ -342,35 +368,56 @@ export default function BargeesMainBoard() {
             {!isHidden &&
               !WIN_CELLS.includes(index) &&
               player1PiecesIndices.includes(index) &&
-              player1PiecesIndices.map((pos, pieceIdx) =>
-                pos === index ? (
+              player1PiecesIndices.map((pos, pieceIdx) => {
+                const playersCount = getPlayersCountOnStone("player1", index);
+                return(
+                  pos === index ? (
+                    <div className="relative bg-blue-500">
                   <Player
                     key={`p1-${pieceIdx}`}
                     player="player1"
                     id={pieceIdx}
                     handleStoneClicked={() => handleStoneClicked(index ,selectedPieceIndex)}
                     cellIdx={index}
-                  />
-                ) : null,
-              )}
+                    />
+                    <NumberOfPlayers playersCount={playersCount} />
+                    </div>
+              
+            ) : null
+          )
+          
+      })}
 
             {!isHidden &&
               !WIN_CELLS.includes(index) &&
               player2PiecesIndices.includes(index) &&
-              player2PiecesIndices.map((pos, pieceIdx) =>
-                pos === index ? (
+              player2PiecesIndices.map((pos, pieceIdx) => {
+              const playersCount = getPlayersCountOnStone("player2", index);
+                return (
+                  pos === index ? (
+                    <div className="relative bg-blue-500 z-99">
                   <Player
                     key={`p2-${pieceIdx}`}
                     player="player2"
                     id={pieceIdx}
                     handleStoneClicked={() => handleStoneClicked(index ,selectedPieceIndex)}
                     cellIdx={index}
-                  />
-                ) : null,
+                    />
+                  <NumberOfPlayers playersCount={playersCount} />
+                  </div>
+                ) : null
+              )
+              }
               )}
-          </div>
+          </button>
         );
       })}
     </div>
   );
+}
+
+
+function NumberOfPlayers({playersCount})
+{
+  return <div className="absolute top-0 left-0 w-4 h-6 bg-mint-500 z-100 rounded-xl flex justify-center items-center bold ">{playersCount}</div>
 }

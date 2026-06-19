@@ -39,7 +39,7 @@ export default function BargeesGame() {
   //and each piece created added to the end of the array (in ordered way)
   //e.g. [-1,4,102,6] and [-1,-1,-1,5] are correct but [-1,3,5,-1] and [5, -1, -1, -1] aren't allowed
   const [player2PiecesIndices, setPlayer2PiecesIndices] = useState([
-    276, -1, -1, -1,
+    -1, 276, -1, -1,
   ]);
 
   const [message, setMessage] = useState("");

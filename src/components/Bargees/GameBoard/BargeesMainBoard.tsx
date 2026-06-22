@@ -76,7 +76,7 @@ export default function BargeesMainBoard() {
     );
 
     let baseStyle;
-    if (preventedCell(index)) return "bg-black border-black";
+    if (preventedCell(index)) return "inherit border-black border-none";
     else if (killingCells.includes(index))
       baseStyle = "bg-linear-90 from-red-500 to-red-800";
     else if (index === selectedPiecePos && selectedPieceIndex !== -1)
@@ -376,7 +376,7 @@ export default function BargeesMainBoard() {
 
   return (
     <div
-      className="grid dark:bg-black bg-white shadow-2xl -rotate-45 rounded-[1px] overflow-hidden "
+      className="grid inherit shadow-2xl -rotate-45 rounded-[1px] overflow-hidden "
       style={{
         gridTemplateColumns: "repeat(19, 1fr)",
         width: "min(60vw, 760px)",

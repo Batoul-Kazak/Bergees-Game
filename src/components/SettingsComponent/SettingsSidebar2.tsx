@@ -21,6 +21,8 @@ export default function SettingsSidebar2() {
     setGameMode,
     showHints,
     setShowHints,
+    colorTheme,
+    setColorTheme
   } = useSettings();
 
   return (
@@ -77,7 +79,19 @@ export default function SettingsSidebar2() {
                 { value: "memoryGame", label: "Memory Game" },
               ]}
             />
-            <Select
+          <Select
+              label="Color Theme"
+              value={colorTheme}
+              onChange={setColorTheme}
+              isDarkMode={isDarkMode}
+              options={[
+                { value: "blackAndWhite", label: "Black and white" },
+                { value: "wooden", label: "Wooden" },
+                { value: "glass", label: "Glass" },
+              ]}
+            /> 
+
+            {/* <Select
               label="Game Mode"
               value={gameMode}
               onChange={setGameMode}
@@ -87,13 +101,13 @@ export default function SettingsSidebar2() {
                 { value: "playWithPerson", label: "Play with Person" },
                 { value: "playWithComputer", label: "Play with Computer" },
               ]}
-            />
-            <Toggle
+            /> */}
+            {/* <Toggle
               label="Game Ended"
               checked={isGameEnded}
               onChange={setIsGameEnded}
               isDarkMode={isDarkMode}
-            />
+            /> */}
           </Section>
 
           {/* Display Section */}
@@ -104,13 +118,13 @@ export default function SettingsSidebar2() {
               onChange={setIsDarkMode}
               isDarkMode={isDarkMode}
             />
-            <Toggle
+            {/* <Toggle
               label="Show Hints"
               checked={showHints}
               onChange={setShowHints}
               isDarkMode={isDarkMode}
-            />
-            <Select
+            /> */}
+            {/* <Select
               label="Language"
               value={language}
               onChange={setLanguage}
@@ -119,7 +133,7 @@ export default function SettingsSidebar2() {
                 { value: "en", label: "English" },
                 { value: "de", label: "Deutsch" },
               ]}
-            />
+            /> */}
           </Section>
 
           {/* Audio Section */}

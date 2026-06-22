@@ -25,7 +25,7 @@ const SettingsContext = createContext<SettingsContextType | undefined>(undefined
 
 export function SettingsProvider({children}: {children: React.ReactNode})
 {
-    const [activeGame, setActiveGame] = useState("bargees"); // "bargees" | "chess" | "memoryGame"
+    const [activeGame, setActiveGame] = useState("none"); // "bargees" | "chess" | "memoryGame"
     const [isGameEnded, setIsGameEnded] = useState(false);
     const [isDarkMode, setIsDarkMode] = useState(true);
     const [masterVolume, setMasterVolume] = useState(0.5);
@@ -34,6 +34,7 @@ export function SettingsProvider({children}: {children: React.ReactNode})
     const [isSideBarOpen, setIsSideBarOpen] = useState(false);
     const [gameMode, setGameMode] = useState("singlePlayer"); // "playWithPerson" | "playWithComputer"
     const [showHints, setShowHints] = useState(true);
+    const [colorTheme, setColorTheme] = useState("wooden");
 
     return(
         <SettingsContext.Provider value={{
@@ -54,7 +55,9 @@ export function SettingsProvider({children}: {children: React.ReactNode})
             gameMode,
             setGameMode,
             showHints,
-            setShowHints
+            setShowHints,
+            colorTheme,
+            setColorTheme
         }}>
             {children}
         </SettingsContext.Provider>

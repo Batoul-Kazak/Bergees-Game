@@ -1,13 +1,16 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+
 body {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+  /* display: flex; */
+  /* flex-direction: row; */
+  /* justify-content: space-between; */
+  /* align-items: center; */
   overflow-x: hidden;
-  height: 100vh;
-  background: #000;
+  /* height: 100vh; */
+  /* background: #000; */
 }
 
 button {

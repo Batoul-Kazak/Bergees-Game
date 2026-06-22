@@ -42,7 +42,7 @@ NOTE: THAT PROBLEM DOESN'T HAPPEN WHEN PLAYER CLICK ON THE STONE DIRECTLY NOT ON
 
 ****Later on add these games to make this web app a collection of games
 -Chess
--Dama
+-checkers
 -something like mario or diamond rush (needs svg images to be able to use not squared shapes (transparent background))
 -Regicide or FreeCell
 -move the block puzzle
@@ -55,3 +55,65 @@ other options
   | "uno" | "monopoly" | "risk" | "settlers-of-catan" | "carcassonne" 
   | "ticket-to-ride" | "pandemic" | "codenames" | 
 "7-wonders" | "splendor" | "azul";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Based on the image, this game is called **Checkers** (known as **Draughts** in the UK and many other countries).
+
+Specifically, looking at the 8x8 board, the 12 pieces per side, and the website printed at the bottom ("usacheckers.com"), this is **American Checkers** (also called English Draughts). The numbers on the board are used for recording moves in tournaments.
+
+Here are the rules in brief:
+
+**1. The Objective**
+The goal is to win by either capturing all of your opponent's pieces or blocking them so they have no legal moves left.
+
+**2. Movement**
+*   Pieces (men) move only on the dark squares.
+*   A regular piece moves diagonally forward one square at a time to an empty space.
+
+**3. Capturing (Jumping)**
+*   If an opponent's piece is diagonally adjacent to yours and the square immediately behind it is empty, you must jump over it.
+*   The jumped piece is removed from the board.
+*   **Mandatory Jumps:** In standard rules, if a capture is available, you *must* take it. You cannot make a regular move if a jump is possible.
+
+**4. Kings**
+*   When a piece reaches the furthest row on the opposite side of the board, it becomes a "King."
+*   Kings can move and capture diagonally both **forward and backward**.
+*   (In physical sets, this is usually done by stacking a second piece on top of the first one).
+
+**5. Multi-Jumps**
+*   If after jumping a piece, you land in a position where you can jump another piece, you must continue jumping in the same turn until no more jumps are possible.

@@ -2,13 +2,7 @@ import React, { useState } from 'react'
 import ChessBoard from './ChessBoard';
 import { ChessGameContext } from '../../contexts/ChessGameContext';
 import { BlackPiecesInitialPositions, pawnsInitialState, WhitePiecesInitialPositions } from '../../constants/ChessGame/PiecesInitialIndicies';
-
-type moveTypeType = "capture" | "promotion" | "normal" | "castling"; 
-
-type selectedPlayerAvailableCellType = {
-    idx: number,
-    moveType: moveTypeType
-};
+import { selectedPlayerAvailableCellType } from '../../types/ChessGame/ChessGameTypes';
 
 export default function ChessGame() {
 

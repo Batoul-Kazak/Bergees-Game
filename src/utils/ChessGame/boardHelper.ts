@@ -1,4 +1,4 @@
-import { pawnsInitialStateType, PieceIndexType } from "../../types/ChessGame/ChessGameTypes";
+import { pawnsInitialStateType, PieceIndexType, selectedPlayerAvailableCellType } from "../../types/ChessGame/ChessGameTypes";
 
 export function getSelectedPlayerInfo(selectedPlayerPosition, whitePiecesPositions, blackPiecesPositions)
 {
@@ -46,44 +46,79 @@ export const getPlayerSettingOnCell = (stoneIdx, whitePiecesPositions, blackPiec
     return player;
 }
 
-export function getMovePath(selectedPlayer, playerTurn, whitePiecesPositions, blackPiecesPositions, playerKingHasCastled, playerPawnsHaveMoved)
-{
-    if(!selectedPlayer || !selectedPlayer.color) return [];
+// export function getMovePath(selectedPlayer, playerTurn, whitePiecesPositions, blackPiecesPositions, playerKingHasCastled, playerPawnsHaveMoved, setBlackPiecesPositions,setWhitePiecesPositions)
+// {
+//     if(!selectedPlayer || !selectedPlayer.color) return [];
 
-    if(playerTurn !== selectedPlayer.color) return [];
+//     if(playerTurn !== selectedPlayer.color) return [];
 
-    let movePath: number[] = [];
-    if(selectedPlayer.pieceType === "pawn")
-    {
-        const pawnStatus = playerPawnsHaveMoved.find((pawn: pawnsInitialStateType) => pawn.id === selectedPlayer.id);
-        // const pawnMaxSteps = selectedPlayer.id === playerPawnsHaveMoved.id ? (playerPawnsHaveMoved.hasMovedBefore ? 1 : 2) : -1;
-        const hasMoved = pawnStatus?.hasMovedBefore;
+//     let movePath: selectedPlayerAvailableCellType[] = [];
+//     if(selectedPlayer.pieceType === "pawn")
+//     {
+//         movePath = getPawnPath(selectedPlayer, playerTurn, whitePiecesPositions, blackPiecesPositions, playerPawnsHaveMoved,setBlackPiecesPositions,setWhitePiecesPositions);
+//     }
+//     console.log(movePath);
+//     return movePath.filter(item => item.idx > 0 && item.idx < 64);
+// }
 
-        if(playerTurn === "white")
-        {
-            movePath.push(selectedPlayer.idx - 8);
+// function getPawnPath(
+//     selectedPlayer,
+//     playerTurn,
+//     whitePiecesPositions,
+//     blackPiecesPositions,
+//     playerPawnsHaveMoved,
+//     setBlackPiecesPositions,
+//     setWhitePiecesPositions)
+// {
+//     let movePath: selectedPlayerAvailableCellType[] = [];
+//     const pawnStatus = playerPawnsHaveMoved.find((pawn: pawnsInitialStateType) => pawn.id === selectedPlayer.id);
+//         // const pawnMaxSteps = selectedPlayer.id === playerPawnsHaveMoved.id ? (playerPawnsHaveMoved.hasMovedBefore ? 1 : 2) : -1;
+//         const hasMoved = pawnStatus?.hasMovedBefore;
 
-            if(!hasMoved && selectedPlayer.idx >=48 && selectedPlayer.idx <= 58)
-                movePath.push(selectedPlayer.idx - 16);
-        } else {
-            movePath.push(selectedPlayer.idx + 8);
+//         if(playerTurn === "white")
+//         {
+//             movePath.push({idx: selectedPlayer.idx - 8, moveType: "normal"});
 
-            if(!hasMoved && selectedPlayer.idx >= 8 && selectedPlayer.idx <= 15)
-                movePath.push(selectedPlayer.idx + 16);
-        }
+//             if(!hasMoved && selectedPlayer.idx >=48 && selectedPlayer.idx <= 58)
+//                 movePath.push({idx: selectedPlayer.idx - 16, moveType: "normal"});
+//         } else {
+//             movePath.push({idx: selectedPlayer.idx + 8, moveType: "normal"});
 
-        const opponentPiecesPositions = playerTurn === "white" ? blackPiecesPositions : whitePiecesPositions;
-        const sign = playerTurn === "white" ? -1 : +1;
-        const isOpponent_Threatened_1 = opponentPiecesPositions.find(item => (item.idx === selectedPlayer.idx + 7 * sign))
-        const isOpponent_Threatened_2 = opponentPiecesPositions.find(item => (item.idx === selectedPlayer.idx + 9 * sign))
+//             if(!hasMoved && selectedPlayer.idx >= 8 && selectedPlayer.idx <= 15)
+//                 movePath.push({idx: selectedPlayer.idx + 16, moveType: "normal"});
+//         }
 
-        if(isOpponent_Threatened_1) movePath.push(isOpponent_Threatened_1.idx);
-        if(isOpponent_Threatened_2) movePath.push(isOpponent_Threatened_2.idx);
+//         const opponentPiecesPositions = playerTurn === "white" ? blackPiecesPositions : whitePiecesPositions;
+//         const setOpponentPiecesPositions = playerTurn === "white" ? setBlackPiecesPositions : setWhitePiecesPositions;
+//         const sign = playerTurn === "white" ? -1 : +1;
+//         const isOpponent_Threatened_1 = opponentPiecesPositions.find((item: selectedPlayerAvailableCellType) => (item.idx === selectedPlayer.idx + 7 * sign))
+//         const isOpponent_Threatened_2 = opponentPiecesPositions.find((item: selectedPlayerAvailableCellType) => (item.idx === selectedPlayer.idx + 9 * sign))
+
+
+//         if(isOpponent_Threatened_1) {
+//             movePath.push({idx: isOpponent_Threatened_1.idx, moveType: "capture"})
+            
+//             setOpponentPiecesPositions(prev => {
+//                 if(prev.idx === selectedPlayer.idx + 7 * sign) {
+//                 const killedPiece = {id: prev.id, idx: -1, color: !playerTurn, pieceType: "pawn"}
+//                 return killedPiece;
+//             } else
+//                  return prev;
+//             });
+//         };
         
+//         if(isOpponent_Threatened_2) {
+//             movePath.push({idx: isOpponent_Threatened_2.idx, moveType: "capture"})
 
-    }
-    console.log(movePath);
-    return movePath.filter(idx => idx > 0 && idx < 64);
-}
+//              setOpponentPiecesPositions(prev => {
+//                 if(prev.idx === selectedPlayer.idx + 9 * sign) {
+//                 const killedPiece = {id: prev.id, idx: -1, color: !playerTurn, pieceType: "pawn"}
+//                 return killedPiece;
+//             } else
+//                  return prev;
+//             });
 
-// function getPawnPath
+//         };
+        
+//         return movePath.filter(item => item.idx > 0 && item.idx < 64);
+// }

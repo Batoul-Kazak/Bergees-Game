@@ -17,15 +17,6 @@ export function ChessStone({ color, stoneIdx }: { color: "white" | "black", ston
       setBlackPiecesPositions,
       setWhitePiecesPositions,
       playerTurn,
-      setPlayerTurn,
-      blackPawnsHaveMoved, 
-      setBlackPawnsHaveMoved,
-      whiteKingHasCastled, 
-      setWhiteKingHasCastled,
-      blackKingHasCastled, 
-      setBlackKingHasCastled,
-      whitePawnsHaveMoved, 
-      setWhitePawnHaveMoved,
       selectedPlayerAvailableCells,
       setSelectedPlayerAvailableCells
    } = useContext(ChessGameContext);
@@ -49,9 +40,6 @@ export function ChessStone({ color, stoneIdx }: { color: "white" | "black", ston
 
   function handleStoneClicked()
   {
-    // const playerKingHasCastled = playerTurn === "white" ? whiteKingHasCastled : blackKingHasCastled;
-    // const playerPawnHaveMoved = playerTurn === "white" ? whitePawnsHaveMoved : blackPawnsHaveMoved;
-    // const setPlayerPawnHaveMoved = playerTurn === "white" ? setWhitePawnHaveMoved : setBlackPawnsHaveMoved;
     const clickedCellInfo = getPlayerSettingOnCell(stoneIdx, whitePiecesPositions, blackPiecesPositions);
     const selectedPlayer = getSelectedPlayerInfo(selectedPlayerPosition, whitePiecesPositions, blackPiecesPositions);
     

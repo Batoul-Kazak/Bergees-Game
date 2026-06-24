@@ -1,6 +1,6 @@
-export {getKnightLogic} from "./knightLogic";
 export {getPawnMoves} from "./getPawnMoves";
-export {getKingLogic} from "./kingLogic";
-export {getRookLogic} from "./rookLogic";
-export {getBishopLogic} from "./bishopLogic";
-export {getQueenLogic} from "./queenLogic";
+// export {getKingMoves} from "./getKingMoves";
+// export {getRookLogic} from "./rookLogic";
+export {getBishopLogic} from "./getBishopMoves";
+export {getKnightMoves} from "./getKnightMoves";
+export {getQueenLogic} from "./getQueenMoves";

@@ -10,9 +10,7 @@ export function useMovePath()
             whitePiecesPositions,
             blackPiecesPositions,
             whitePawnsHaveMoved,
-            blackPawnsHaveMoved,
-            setWhitePiecesPositions,
-            setBlackPiecesPositions
+            blackPawnsHaveMoved
         } = useContext(ChessGameContext);
 
     const getMovesPath = useCallback((selectedPlayer: PieceIndexType | null) : selectedPlayerAvailableCellType[] => {
@@ -29,9 +27,7 @@ export function useMovePath()
                 playerTurn,
                 whitePiecesPositions,
                 blackPiecesPositions,
-                playerPawnHasMoved,
-                setWhitePiecesPositions,
-                setBlackPiecesPositions); break;
+                playerPawnHasMoved); break;
             case "queen": break;
             case "king": break;
             case "knight": break;

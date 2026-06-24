@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { ChessGameContext } from "../contexts/ChessGameContext";
-import { PieceIndexType } from "../types/ChessGame/ChessGameTypes";
+import { pawnsInitialStateType, PieceIndexType } from "../types/ChessGame/ChessGameTypes";
 
 export function useChessActions()
 {
@@ -31,8 +31,9 @@ export function useChessActions()
 
             if(selectedPiece.pieceType === "pawn")
             {
-                playerPawnHaveMovedSetter((prev: PieceIndexType[]) => {
-            return prev.map((piece) => piece.idx === selectedPiece.idx ? {...piece, idx: targetIdx} : piece)});
+            playerPawnHaveMovedSetter((prev: pawnsInitialStateType[]) => {
+                return prev.map((pawn) => pawn.id === selectedPiece.id ? {...pawn, hasMovedBefore: true} : pawn);
+            })
             }
             //  else
                 //  if (selectedPiece.pieceType === "king" && Math.abs(targetIdx - selectedPiece.idx) === 2) {
@@ -43,6 +44,11 @@ export function useChessActions()
                     // }
                     // return p;
                 // }));
+            // }
+
+            // if(selectedPiece.pieceType === "knight")
+            // {
+
             // }
 
             setPlayerTurn(prev => prev === "white" ? "black" : "white");

@@ -1,7 +1,7 @@
 import WhiteQueen from "../../../public/images/white-queen.png"
-import BlackQueen from "../../../public/images/white-queen.png"
+import BlackQueen from "../../../public/images/black-queen.png"
 
-import WhiteKing from "../../../public/images/black-king.svg"
+import WhiteKing from "../../../public/images/white-king.svg"
 import BlackKing from "../../../public/images/black-king.svg"
 
 import WhitePawn from "../../../public/images/white-pawn.png"
@@ -10,11 +10,11 @@ import BlackPawn from "../../../public/images/black-pawn.png"
 import WhiteKnight from "../../../public/images/white-knight.png"
 import BlackKnight from "../../../public/images/black-knight.png"
 
-import WhiteBishop from "../../../public/images/black-bishop.svg"
+import WhiteBishop from "../../../public/images/white-bishop.png"
 import BlackBishop from "../../../public/images/black-bishop.svg"
 
-import WhiteRook from "../../../public/images/black-rook.svg"
-import BlackRook from "../../../public/images/black-rook.svg"
+import WhiteRook from "../../../public/images/white-rook.png"
+import BlackRook from "../../../public/images/black-rook.png"
 
 
 export default function ChessPiece({player, type})

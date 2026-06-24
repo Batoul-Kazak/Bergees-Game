@@ -3,6 +3,8 @@ import { ChessGameContext } from "../contexts/ChessGameContext";
 import {  PieceIndexType, selectedPlayerAvailableCellType } from "../types/ChessGame/ChessGameTypes";
 import { getPawnMoves } from "../utils/ChessGame/getPawnMoves";
 import { getKnightMoves } from "../utils/ChessGame/getKnightMoves";
+import { getRookMoves } from "../utils/ChessGame/getRookMoves";
+import { getBishopMoves } from "../utils/ChessGame/getBishopMoves";
 
 export function useMovePath()
 {
@@ -36,8 +38,18 @@ export function useMovePath()
                 playerTurn,
                 whitePiecesPositions,
                 blackPiecesPositions); break;
-            case "rook": break;
-            case "bishop": break;
+            case "rook": moves = getRookMoves(
+                selectedPlayer,
+                playerTurn,
+                whitePiecesPositions,
+                blackPiecesPositions
+            ); break;
+            case "bishop":  moves = getBishopMoves(
+                selectedPlayer,
+                playerTurn,
+                whitePiecesPositions,
+                blackPiecesPositions
+            ); break;
         }
         return moves.filter(item => item.idx >= 0 && item.idx <= 63);
     }, [playerTurn, whitePawnsHaveMoved, blackPawnsHaveMoved, whitePiecesPositions, blackPiecesPositions]);

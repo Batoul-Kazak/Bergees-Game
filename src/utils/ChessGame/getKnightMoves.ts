@@ -7,10 +7,8 @@ export function getKnightMoves(
     blackPiecesPositions: PieceIndexType[]
 )
 {
-    let movesPath: selectedPlayerAvailableCellType[] = [];
+    const movesPath: selectedPlayerAvailableCellType[] = [];
     const directions: number[] = [-10, +10, -15, +15, +6, -6, +17, -17];
-
-    const selectedPiecePosition: PieceIndexType = piece.idx;
 
     const playerPiecesPositions = playerTurn === "white" ? whitePiecesPositions : blackPiecesPositions;
     const opponentPiecesPositions = playerTurn === "white" ? blackPiecesPositions : whitePiecesPositions;

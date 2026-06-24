@@ -2,6 +2,7 @@ import { useCallback, useContext } from "react";
 import { ChessGameContext } from "../contexts/ChessGameContext";
 import {  PieceIndexType, selectedPlayerAvailableCellType } from "../types/ChessGame/ChessGameTypes";
 import { getPawnMoves } from "../utils/ChessGame/getPawnMoves";
+import { getKnightMoves } from "../utils/ChessGame/getKnightMoves";
 
 export function useMovePath()
 {
@@ -30,7 +31,11 @@ export function useMovePath()
                 playerPawnHasMoved); break;
             case "queen": break;
             case "king": break;
-            case "knight": break;
+            case "knight": moves = getKnightMoves(       
+                selectedPlayer,
+                playerTurn,
+                whitePiecesPositions,
+                blackPiecesPositions); break;
             case "rook": break;
             case "bishop": break;
         }

@@ -4,7 +4,6 @@ export function getSelectedPlayerInfo(selectedPlayerPosition, whitePiecesPositio
 {
     const allPieces = whitePiecesPositions.concat(blackPiecesPositions);
     const playerInfo = allPieces.find((piece: PieceIndexType) => piece.idx === selectedPlayerPosition);
-    console.log(playerInfo);
     return playerInfo;
 }
 
